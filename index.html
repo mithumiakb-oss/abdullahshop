@@ -450,16 +450,16 @@
         <div class="form-row">
           <div class="form-group">
             <label>আপনার নাম</label>
-            <input type="text" placeholder="নাম লিখুন" required>
+            <input type="text" name="name" placeholder="নাম লিখুন" required>
           </div>
           <div class="form-group">
             <label>মোবাইল নম্বর</label>
-            <input type="tel" placeholder="01XXXXXXXXX" required>
+            <input type="tel" name="phone" placeholder="01XXXXXXXXX" required>
           </div>
         </div>
         <div class="form-group">
           <label>পণ্য নির্বাচন করুন</label>
-          <select required>
+          <select name="product" required>
             <option value="">-- একটি পণ্য বেছে নিন --</option>
             <option>প্রিমিয়াম কটন লুঙ্গি — ৳৬৫০</option>
             <option>মোবাইল এক্সেসরিজ কম্বো — ৳১২৫০</option>
@@ -468,9 +468,9 @@
         </div>
         <div class="form-group">
           <label>ঠিকানা</label>
-          <textarea placeholder="সম্পূর্ণ ঠিকানা লিখুন" required></textarea>
+          <textarea name="address" placeholder="সম্পূর্ণ ঠিকানা লিখুন" required></textarea>
         </div>
-        <button type="submit" class="submit-btn">অর্ডার নিশ্চিত করুন</button>
+        <button type="submit" class="submit-btn" id="submitBtn">অর্ডার নিশ্চিত করুন</button>
         <div class="form-msg" id="formMsg">ধন্যবাদ! আপনার অর্ডার সফলভাবে জমা হয়েছে। শীঘ্রই যোগাযোগ করা হবে।</div>
       </form>
     </div>
@@ -494,9 +494,8 @@
     <div>
       <h3>যোগাযোগ</h3>
       <ul>
-        <li>📞 ০১৭৬৬১০০৭০৯</li>
-        <li>✉️ infoabdullahshop@gmail.com
-</li>
+        <li>📞 ০১৭XXXXXXXX</li>
+        <li>✉️ info@abdullahshop.com</li>
         <li>📍 ময়মনসিংহ, বাংলাদেশ</li>
       </ul>
     </div>
@@ -513,14 +512,38 @@
     });
   });
 
-  // Order form submit (demo — shows confirmation message)
+  // Order form submit — sends data to Google Apps Script (Sheet + Email)
+  // ⚠️ নিচের URL টা বদলে আপনার নিজের Apps Script deploy URL বসান
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxpPLOwKBzvmhXxX1kwuHDlMeKBdQmmqX5mvJ-rx37ZEhF1i0ksECy5m7uHrut6LUNJ/exec";
+
   const form = document.getElementById('orderForm');
   const msg = document.getElementById('formMsg');
+  const submitBtn = document.getElementById('submitBtn');
+
   form.addEventListener('submit', function(e){
     e.preventDefault();
-    msg.style.display = 'block';
-    form.reset();
-    setTimeout(()=>{ msg.style.display='none'; }, 5000);
+    submitBtn.disabled = true;
+    submitBtn.textContent = "পাঠানো হচ্ছে...";
+
+    const formData = new FormData(form);
+
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: formData
+    })
+    .then(()=>{
+      msg.style.display = 'block';
+      form.reset();
+      submitBtn.disabled = false;
+      submitBtn.textContent = "অর্ডার নিশ্চিত করুন";
+      setTimeout(()=>{ msg.style.display='none'; }, 5000);
+    })
+    .catch(()=>{
+      alert("দুঃখিত, অর্ডার পাঠাতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
+      submitBtn.disabled = false;
+      submitBtn.textContent = "অর্ডার নিশ্চিত করুন";
+    });
   });
 
   // Quick "buy" buttons scroll to order form
