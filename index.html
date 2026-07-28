@@ -4,6 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AbdullahShop.com — আপনার পছন্দের অনলাইন দোকান</title>
+<meta name="description" content="AbdullahShop.com — লুঙ্গি, মোবাইল এক্সেসরিজ ও মোটরসাইকেল সহ প্রয়োজনীয় সবকিছু এক জায়গায়, ক্যাশ অন ডেলিভারিতে সারাদেশে।">
+
+<!-- Social share preview -->
+<meta property="og:title" content="AbdullahShop.com — আপনার পছন্দের অনলাইন দোকান">
+<meta property="og:description" content="লুঙ্গি, মোবাইল এক্সেসরিজ ও মোটরসাইকেল সহ প্রয়োজনীয় সবকিছু এক জায়গায়।">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mithumiakb-oss.github.io/abdullahshop/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AbdullahShop.com">
+<meta name="twitter:description" content="লুঙ্গি, মোবাইল এক্সেসরিজ ও মোটরসাইকেল — এক জায়গায়।">
+
+<!-- Favicon (shopping bag emoji as a quick favicon) -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛍️</text></svg>">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -22,6 +36,14 @@
   }
   *{margin:0;padding:0;box-sizing:border-box;}
   html{scroll-behavior:smooth;}
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible{
+    outline:3px solid var(--gold-dark); outline-offset:2px;
+  }
+  .skip-link{
+    position:absolute; left:-9999px; top:auto; background:var(--forest); color:var(--white);
+    padding:12px 20px; border-radius:0 0 10px 0; z-index:200; font-weight:700;
+  }
+  .skip-link:focus{left:0; top:0;}
   body{
     background:var(--paper);
     color:var(--ink);
@@ -50,6 +72,7 @@
   .nav-wrap{
     max-width:1180px; margin:0 auto; padding:14px 24px;
     display:flex; align-items:center; justify-content:space-between;
+    position:relative;
   }
   .logo-group{display:flex; align-items:center; gap:10px;}
   .logo-group .brand{font-size:1.5rem; font-weight:700; color:var(--forest);}
@@ -64,7 +87,14 @@
     transition:transform .15s;
   }
   .nav-cta:hover{transform:translateY(-2px);}
-  .menu-toggle{display:none;}
+  .menu-toggle{
+    display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer;
+    padding:8px; margin-left:4px;
+  }
+  .menu-toggle span{width:24px; height:3px; background:var(--forest); border-radius:3px; transition:.25s;}
+  .menu-toggle.open span:nth-child(1){transform:translateY(8px) rotate(45deg);}
+  .menu-toggle.open span:nth-child(2){opacity:0;}
+  .menu-toggle.open span:nth-child(3){transform:translateY(-8px) rotate(-45deg);}
 
   /* ===== HERO ===== */
   .hero{
@@ -166,6 +196,7 @@
     height:210px; display:flex; align-items:center; justify-content:center; position:relative;
   }
   .p-visual svg{width:65%; height:65%;}
+  .p-img{width:100%; height:100%; object-fit:cover;}
   .p-tag{
     position:absolute; top:14px; left:14px; background:var(--gold); color:var(--forest);
     font-weight:700; font-size:.78rem; padding:5px 12px; border-radius:999px;
@@ -182,6 +213,61 @@
     transition:.2s;
   }
   .buy-btn:hover{background:var(--forest);}
+
+  /* ===== CART ===== */
+  .cart-icon-btn{
+    position:relative; display:flex; align-items:center; justify-content:center;
+    width:44px; height:44px; border-radius:50%; background:var(--paper-2); border:none; cursor:pointer;
+    transition:.2s; margin-right:6px;
+  }
+  .cart-icon-btn:hover{background:var(--forest);}
+  .cart-icon-btn:hover svg path, .cart-icon-btn:hover svg circle{stroke:var(--white);}
+  .cart-icon-btn svg{width:22px; height:22px;}
+  .cart-badge{
+    position:absolute; top:-4px; right:-4px; background:var(--gold); color:var(--forest);
+    font-size:.68rem; font-weight:800; min-width:18px; height:18px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; padding:0 3px;
+  }
+  .cart-overlay{
+    position:fixed; inset:0; background:rgba(15,20,17,.5); z-index:90; display:none;
+  }
+  .cart-overlay.open{display:block;}
+  .cart-drawer{
+    position:fixed; top:0; right:-420px; width:380px; max-width:90vw; height:100%; background:var(--white);
+    z-index:91; box-shadow:-8px 0 30px rgba(0,0,0,.15); transition:right .3s ease;
+    display:flex; flex-direction:column; padding:26px;
+  }
+  .cart-drawer.open{right:0;}
+  .cart-drawer-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;}
+  .cart-drawer-head h3{color:var(--forest); font-size:1.3rem;}
+  .cart-close{background:none; border:none; font-size:1.4rem; cursor:pointer; color:var(--ink-soft);}
+  .cart-items{flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:14px;}
+  .cart-empty{color:var(--ink-soft); text-align:center; margin-top:60px;}
+  .cart-item{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    padding:12px; background:var(--paper); border-radius:12px;
+  }
+  .cart-item-name{font-weight:600; font-size:.92rem; color:var(--ink); flex:1;}
+  .cart-item-price{font-family:'Baloo Da 2'; color:var(--forest); font-weight:700; font-size:.95rem;}
+  .cart-qty{display:flex; align-items:center; gap:8px;}
+  .cart-qty button{
+    width:24px; height:24px; border-radius:50%; border:1px solid var(--paper-2); background:var(--white);
+    cursor:pointer; font-weight:700; color:var(--forest); line-height:1;
+  }
+  .cart-remove{background:none; border:none; color:#C0392B; cursor:pointer; font-size:.85rem; font-weight:600;}
+  .cart-footer{border-top:2px dashed var(--paper-2); padding-top:18px; margin-top:14px;}
+  .cart-total-row{display:flex; justify-content:space-between; font-weight:700; color:var(--forest); font-size:1.1rem; margin-bottom:14px;}
+  .cart-checkout-btn{
+    width:100%; background:var(--forest); color:var(--white); font-weight:700; padding:14px;
+    border:none; border-radius:999px; font-family:'Hind Siliguri'; font-size:1rem; cursor:pointer;
+  }
+  .selected-products-box{
+    background:var(--paper); border:2px solid var(--paper-2); border-radius:10px; padding:14px;
+    display:flex; flex-direction:column; gap:8px; min-height:60px;
+  }
+  .selected-products-box .empty-note{color:var(--ink-soft); font-size:.9rem;}
+  .selected-line{display:flex; justify-content:space-between; font-size:.92rem; color:var(--ink);}
+  .selected-total{display:flex; justify-content:space-between; font-weight:700; color:var(--forest); border-top:1px dashed var(--paper-2); padding-top:8px; margin-top:4px;}
 
   /* ===== ORDER FORM ===== */
   .order-wrap{
@@ -235,7 +321,16 @@
   @media (max-width: 900px){
     .hero-inner{grid-template-columns:1fr;}
     .hero h1{font-size:2.3rem;}
-    nav{display:none;}
+    .menu-toggle{display:flex;}
+    nav{
+      display:block; position:absolute; top:100%; left:0; right:0; background:var(--white);
+      border-bottom:2px solid var(--paper-2); box-shadow:0 12px 20px rgba(0,0,0,.06);
+      max-height:0; overflow:hidden; transition:max-height .25s ease;
+    }
+    nav.open{max-height:300px;}
+    nav ul{flex-direction:column; gap:0; padding:10px 24px;}
+    nav ul li{border-bottom:1px solid var(--paper-2);}
+    nav ul li a{display:block; padding:14px 4px;}
     .about-wrap{grid-template-columns:1fr; padding:36px;}
     .product-grid{grid-template-columns:1fr 1fr;}
     .order-wrap{grid-template-columns:1fr;}
@@ -249,11 +344,14 @@
 </style>
 </head>
 <body>
+<a href="#main-content" class="skip-link">মূল কন্টেন্টে যান</a>
+<div id="top"></div>
 
 <header>
   <div class="nav-wrap">
     <div class="logo-group">
-      <svg width="38" height="38" viewBox="0 0 100 100">
+      <svg width="38" height="38" viewBox="0 0 100 100" role="img" aria-labelledby="headerLogoTitle">
+        <title id="headerLogoTitle">AbdullahShop লোগো</title>
         <defs>
           <linearGradient id="bagGrad" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stop-color="#3FBE7C"/>
@@ -267,19 +365,46 @@
       </svg>
       <div class="brand">Abdullah<span>Shop</span>.com</div>
     </div>
-    <nav>
+    <nav id="mainNav">
       <ul>
+        <li><a href="#top">হোম</a></li>
         <li><a href="#products">পণ্য</a></li>
         <li><a href="#about">পরিচিতি</a></li>
         <li><a href="#order">অর্ডার</a></li>
         <li><a href="#contact">যোগাযোগ</a></li>
       </ul>
     </nav>
-    <a href="#order" class="nav-cta">এখনই অর্ডার করুন</a>
+    <div style="display:flex; align-items:center;">
+      <button class="cart-icon-btn" id="cartOpenBtn" aria-label="কার্ট">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#0F5132" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="21" r="1"></circle>
+          <circle cx="20" cy="21" r="1"></circle>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+        </svg>
+        <span class="cart-badge" id="cartBadge">0</span>
+      </button>
+      <a href="#order" class="nav-cta">এখনই অর্ডার করুন</a>
+      <button class="menu-toggle" id="menuToggle" aria-label="মেনু"><span></span><span></span><span></span></button>
+    </div>
   </div>
 </header>
 
-<section class="hero">
+<div class="cart-overlay" id="cartOverlay"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-drawer-head">
+    <h3>আপনার কার্ট</h3>
+    <button class="cart-close" id="cartCloseBtn">✕</button>
+  </div>
+  <div class="cart-items" id="cartItemsWrap">
+    <p class="cart-empty">কার্ট এখনো খালি</p>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-total-row"><span>মোট</span><span id="cartTotal">৳০</span></div>
+    <button class="cart-checkout-btn" id="cartCheckoutBtn">অর্ডার করতে যান</button>
+  </div>
+</div>
+
+<section class="hero" id="main-content">
   <div class="bagline"></div>
   <div class="hero-inner">
     <div>
@@ -292,7 +417,8 @@
       </div>
     </div>
     <div class="hero-visual">
-      <svg class="bag-badge" viewBox="0 0 300 300">
+      <svg class="bag-badge" viewBox="0 0 300 300" role="img" aria-labelledby="heroBagTitle">
+        <title id="heroBagTitle">AbdullahShop ব্যাগ লোগো</title>
         <defs>
           <linearGradient id="heroBag" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stop-color="#3FBE7C"/>
@@ -337,28 +463,14 @@
       <div class="p-card">
         <div class="p-visual">
           <span class="p-tag">বেস্ট সেলার</span>
-          <svg viewBox="0 0 200 200">
-            <rect x="40" y="30" width="120" height="150" rx="6" fill="#FAF6EC" stroke="#0F5132" stroke-width="3"/>
-            <g stroke="#1B9C5B" stroke-width="3">
-              <line x1="40" y1="55" x2="160" y2="55"/>
-              <line x1="40" y1="80" x2="160" y2="80"/>
-              <line x1="40" y1="105" x2="160" y2="105"/>
-              <line x1="40" y1="130" x2="160" y2="130"/>
-              <line x1="40" y1="155" x2="160" y2="155"/>
-            </g>
-            <g stroke="#E8A33D" stroke-width="3">
-              <line x1="65" y1="30" x2="65" y2="180"/>
-              <line x1="100" y1="30" x2="100" y2="180"/>
-              <line x1="135" y1="30" x2="135" y2="180"/>
-            </g>
-          </svg>
+          <img class="p-img" src="images/lungi.jpg" alt="প্রিমিয়াম কটন লুঙ্গি">
         </div>
         <div class="p-body">
           <h3>প্রিমিয়াম কটন লুঙ্গি</h3>
           <p>আরামদায়ক খাঁটি কটন কাপড়ে তৈরি, ঐতিহ্যবাহী চেক ডিজাইন। প্রতিদিনের ব্যবহারের জন্য সেরা।</p>
           <div class="price-row">
             <div class="price"><small>৳৯৫০</small>৳৬৫০</div>
-            <button class="buy-btn">অর্ডার করুন</button>
+            <button class="buy-btn add-cart-btn" data-name="প্রিমিয়াম কটন লুঙ্গি" data-price="650">কার্টে যোগ করুন</button>
           </div>
         </div>
       </div>
@@ -367,23 +479,14 @@
       <div class="p-card">
         <div class="p-visual">
           <span class="p-tag">নতুন</span>
-          <svg viewBox="0 0 200 200">
-            <rect x="75" y="30" width="55" height="110" rx="10" fill="#0F5132"/>
-            <rect x="80" y="38" width="45" height="86" rx="3" fill="#FAF6EC"/>
-            <circle cx="102" cy="130" r="4" fill="#FAF6EC"/>
-            <circle cx="45" cy="160" r="14" fill="#1B9C5B"/>
-            <circle cx="150" cy="160" r="14" fill="#1B9C5B"/>
-            <path d="M45 146 Q45 100 80 95" fill="none" stroke="#3FBE7C" stroke-width="4"/>
-            <path d="M150 146 Q150 100 125 95" fill="none" stroke="#3FBE7C" stroke-width="4"/>
-            <rect x="30" y="65" width="26" height="14" rx="3" fill="#E8A33D"/>
-          </svg>
+          <img class="p-img" src="images/mobile-accessories.jpg" alt="মোবাইল এক্সেসরিজ কম্বো">
         </div>
         <div class="p-body">
           <h3>মোবাইল এক্সেসরিজ কম্বো</h3>
           <p>ইয়ারবাডস, ফাস্ট চার্জার ও প্রোটেক্টিভ কভার — একসাথে সাশ্রয়ী প্যাকেজে।</p>
           <div class="price-row">
             <div class="price"><small>৳১৮০০</small>৳১২৫০</div>
-            <button class="buy-btn">অর্ডার করুন</button>
+            <button class="buy-btn add-cart-btn" data-name="মোবাইল এক্সেসরিজ কম্বো" data-price="1250">কার্টে যোগ করুন</button>
           </div>
         </div>
       </div>
@@ -392,21 +495,14 @@
       <div class="p-card">
         <div class="p-visual">
           <span class="p-tag">ফিচার্ড</span>
-          <svg viewBox="0 0 220 160">
-            <circle cx="55" cy="120" r="26" fill="none" stroke="#0F5132" stroke-width="6"/>
-            <circle cx="165" cy="120" r="26" fill="none" stroke="#0F5132" stroke-width="6"/>
-            <path d="M55 120 L95 75 L140 75 L165 120" fill="none" stroke="#1B9C5B" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M95 75 L80 50 L110 50" fill="none" stroke="#1B9C5B" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-            <rect x="120" y="95" width="35" height="16" rx="6" fill="#E8A33D"/>
-            <path d="M140 75 L150 60" stroke="#0F5132" stroke-width="6" stroke-linecap="round"/>
-          </svg>
+          <img class="p-img" src="images/motorcycle.jpg" alt="স্ট্যান্ডার্ড মোটরসাইকেল">
         </div>
         <div class="p-body">
           <h3>স্ট্যান্ডার্ড মোটরসাইকেল</h3>
           <p>জ্বালানি সাশ্রয়ী, শক্তিশালী ইঞ্জিন — শহর ও গ্রাম উভয় পথের জন্য উপযোগী। EMI সুবিধা আছে।</p>
           <div class="price-row">
             <div class="price">৳১,২৫,০০০</div>
-            <button class="buy-btn">অর্ডার করুন</button>
+            <button class="buy-btn add-cart-btn" data-name="স্ট্যান্ডার্ড মোটরসাইকেল" data-price="125000">কার্টে যোগ করুন</button>
           </div>
         </div>
       </div>
@@ -449,29 +545,31 @@
       <form class="order-form" id="orderForm">
         <div class="form-row">
           <div class="form-group">
-            <label>আপনার নাম</label>
-            <input type="text" name="name" placeholder="নাম লিখুন" required>
+            <label for="custName">আপনার নাম</label>
+            <input id="custName" type="text" name="name" placeholder="নাম লিখুন" autocomplete="name" required>
           </div>
           <div class="form-group">
-            <label>মোবাইল নম্বর</label>
-            <input type="tel" name="phone" placeholder="01XXXXXXXXX" required>
+            <label for="custPhone">মোবাইল নম্বর</label>
+            <input id="custPhone" type="tel" name="phone" placeholder="01XXXXXXXXX" autocomplete="tel"
+              pattern="01[0-9]{9}" title="সঠিক বাংলাদেশি মোবাইল নম্বর দিন (যেমন: 01712345678)" required>
           </div>
         </div>
         <div class="form-group">
-          <label>পণ্য নির্বাচন করুন</label>
-          <select name="product" required>
-            <option value="">-- একটি পণ্য বেছে নিন --</option>
-            <option>প্রিমিয়াম কটন লুঙ্গি — ৳৬৫০</option>
-            <option>মোবাইল এক্সেসরিজ কম্বো — ৳১২৫০</option>
-            <option>স্ট্যান্ডার্ড মোটরসাইকেল — ৳১,২৫,০০০</option>
-          </select>
+          <label id="selectedProductsLabel">নির্বাচিত পণ্যসমূহ</label>
+          <div class="selected-products-box" id="selectedProductsBox" role="group" aria-labelledby="selectedProductsLabel">
+            <span class="empty-note">এখনো কোনো পণ্য কার্টে যোগ করা হয়নি — উপরে "পণ্য" সেকশন থেকে কার্টে যোগ করুন।</span>
+          </div>
+          <input type="hidden" name="product" id="productHiddenInput">
         </div>
         <div class="form-group">
-          <label>ঠিকানা</label>
-          <textarea name="address" placeholder="সম্পূর্ণ ঠিকানা লিখুন" required></textarea>
+          <label for="custAddress">ঠিকানা</label>
+          <textarea id="custAddress" name="address" placeholder="সম্পূর্ণ ঠিকানা লিখুন" autocomplete="street-address" required></textarea>
         </div>
         <button type="submit" class="submit-btn" id="submitBtn">অর্ডার নিশ্চিত করুন</button>
-        <div class="form-msg" id="formMsg">ধন্যবাদ! আপনার অর্ডার সফলভাবে জমা হয়েছে। শীঘ্রই যোগাযোগ করা হবে।</div>
+        <div class="form-msg" id="formMsg" role="status" aria-live="polite">ধন্যবাদ! আপনার অর্ডার সফলভাবে জমা হয়েছে। শীঘ্রই যোগাযোগ করা হবে।</div>
+        <noscript>
+          <p style="margin-top:12px; color:#C0392B;">অর্ডার ফর্মটি কাজ করার জন্য ব্রাউজারে JavaScript চালু রাখতে হবে। অথবা সরাসরি ফোনে কল করুন।</p>
+        </noscript>
       </form>
     </div>
   </div>
@@ -494,8 +592,8 @@
     <div>
       <h3>যোগাযোগ</h3>
       <ul>
-        <li>📞 ০১৭৬৬১০০৭০৯</li>
-        <li>✉️ infoabdullahshop@gmail.com</li>
+        <li>📞 ০১৭XXXXXXXX</li>
+        <li>✉️ info@abdullahshop.com</li>
         <li>📍 ময়মনসিংহ, বাংলাদেশ</li>
       </ul>
     </div>
@@ -522,6 +620,11 @@
 
   form.addEventListener('submit', function(e){
     e.preventDefault();
+    const productField = document.getElementById('productHiddenInput');
+    if(!productField.value){
+      alert("অনুগ্রহ করে আগে পণ্য সেকশন থেকে কার্টে অন্তত একটি পণ্য যোগ করুন।");
+      return;
+    }
     submitBtn.disabled = true;
     submitBtn.textContent = "পাঠানো হচ্ছে...";
 
@@ -535,6 +638,8 @@
     .then(()=>{
       msg.style.display = 'block';
       form.reset();
+      cart = [];
+      renderCart();
       submitBtn.disabled = false;
       submitBtn.textContent = "অর্ডার নিশ্চিত করুন";
       setTimeout(()=>{ msg.style.display='none'; }, 5000);
@@ -546,12 +651,130 @@
     });
   });
 
-  // Quick "buy" buttons scroll to order form
-  document.querySelectorAll('.buy-btn').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      document.getElementById('order').scrollIntoView({behavior:'smooth'});
+  // Mobile hamburger menu toggle
+  const menuToggle = document.getElementById('menuToggle');
+  const mainNav = document.getElementById('mainNav');
+  menuToggle.addEventListener('click', ()=>{
+    menuToggle.classList.toggle('open');
+    mainNav.classList.toggle('open');
+  });
+  mainNav.querySelectorAll('a').forEach(link=>{
+    link.addEventListener('click', ()=>{
+      menuToggle.classList.remove('open');
+      mainNav.classList.remove('open');
     });
   });
+
+  // ================= CART =================
+  let cart = []; // { name, price, qty }
+
+  const cartOverlay = document.getElementById('cartOverlay');
+  const cartDrawer = document.getElementById('cartDrawer');
+  const cartBadge = document.getElementById('cartBadge');
+  const cartItemsWrap = document.getElementById('cartItemsWrap');
+  const cartTotalEl = document.getElementById('cartTotal');
+  const selectedProductsBox = document.getElementById('selectedProductsBox');
+  const productHiddenInput = document.getElementById('productHiddenInput');
+
+  function formatTaka(n){
+    return '৳' + n.toLocaleString('en-US');
+  }
+
+  function openCart(){
+    cartOverlay.classList.add('open');
+    cartDrawer.classList.add('open');
+  }
+  function closeCart(){
+    cartOverlay.classList.remove('open');
+    cartDrawer.classList.remove('open');
+  }
+
+  document.getElementById('cartOpenBtn').addEventListener('click', openCart);
+  document.getElementById('cartCloseBtn').addEventListener('click', closeCart);
+  cartOverlay.addEventListener('click', closeCart);
+
+  document.querySelectorAll('.add-cart-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const name = btn.dataset.name;
+      const price = parseInt(btn.dataset.price, 10);
+      const existing = cart.find(i => i.name === name);
+      if(existing){
+        existing.qty += 1;
+      } else {
+        cart.push({name, price, qty:1});
+      }
+      renderCart();
+      const oldText = btn.textContent;
+      btn.textContent = "যোগ হয়েছে ✓";
+      setTimeout(()=>{ btn.textContent = oldText; }, 1200);
+      openCart();
+    });
+  });
+
+  function changeQty(index, delta){
+    cart[index].qty += delta;
+    if(cart[index].qty <= 0){
+      cart.splice(index, 1);
+    }
+    renderCart();
+  }
+
+  function removeItem(index){
+    cart.splice(index, 1);
+    renderCart();
+  }
+
+  function renderCart(){
+    // badge
+    const totalQty = cart.reduce((s,i)=>s+i.qty, 0);
+    cartBadge.textContent = totalQty;
+
+    // drawer items
+    if(cart.length === 0){
+      cartItemsWrap.innerHTML = '<p class="cart-empty">কার্ট এখনো খালি</p>';
+    } else {
+      cartItemsWrap.innerHTML = cart.map((item, idx) => `
+        <div class="cart-item">
+          <div style="flex:1;">
+            <div class="cart-item-name">${item.name}</div>
+            <div class="cart-item-price">${formatTaka(item.price * item.qty)}</div>
+          </div>
+          <div class="cart-qty">
+            <button type="button" onclick="cartChangeQty(${idx},-1)">−</button>
+            <span>${item.qty}</span>
+            <button type="button" onclick="cartChangeQty(${idx},1)">+</button>
+          </div>
+          <button type="button" class="cart-remove" onclick="cartRemoveItem(${idx})">মুছুন</button>
+        </div>
+      `).join('');
+    }
+
+    const total = cart.reduce((s,i)=>s + (i.price*i.qty), 0);
+    cartTotalEl.textContent = formatTaka(total);
+
+    // order form summary box
+    if(cart.length === 0){
+      selectedProductsBox.innerHTML = '<span class="empty-note">এখনো কোনো পণ্য কার্টে যোগ করা হয়নি — উপরে "পণ্য" সেকশন থেকে কার্টে যোগ করুন।</span>';
+      productHiddenInput.value = '';
+    } else {
+      let lines = cart.map(i => `<div class="selected-line"><span>${i.name} × ${i.qty}</span><span>${formatTaka(i.price*i.qty)}</span></div>`).join('');
+      lines += `<div class="selected-total"><span>মোট</span><span>${formatTaka(total)}</span></div>`;
+      selectedProductsBox.innerHTML = lines;
+
+      productHiddenInput.value = cart.map(i => `${i.name} x${i.qty} (${formatTaka(i.price*i.qty)})`).join(', ') + ` | সর্বমোট: ${formatTaka(total)}`;
+    }
+  }
+
+  // expose for inline onclick handlers
+  window.cartChangeQty = changeQty;
+  window.cartRemoveItem = removeItem;
+
+  document.getElementById('cartCheckoutBtn').addEventListener('click', ()=>{
+    closeCart();
+    document.getElementById('order').scrollIntoView({behavior:'smooth'});
+  });
+
+  renderCart();
 </script>
 
 </body>
