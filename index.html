@@ -214,7 +214,9 @@
     background:var(--white); border-radius:var(--radius); overflow:hidden;
     box-shadow:0 8px 24px rgba(15,81,50,.07); border:1px solid var(--paper-2);
     transition:transform .2s, box-shadow .2s; display:flex; flex-direction:column;
+    cursor:pointer;
   }
+
   .p-card:hover{transform:translateY(-6px); box-shadow:0 16px 32px rgba(15,81,50,.15);}
   .p-visual{
     background:linear-gradient(135deg, var(--paper-2), var(--paper));
@@ -516,7 +518,8 @@
     <div class="product-grid">
 
       <!-- Water Dispenser -->
-      <div class="p-card">
+      <div class="p-card" data-id="water-dispenser" data-img="water-dispenser.jpg" data-name="অটোমেটিক ওয়াটার ডিসপেনসার" data-price="550" data-tag="বেস্ট সেলার"
+        data-desc="বোতলের পানি সহজে ও পরিষ্কারভাবে বের করার জন্য USB চার্জেবল অটোমেটিক পাম্প। ব্যবহার করা সহজ ও নিরাপদ — এক চার্জে দীর্ঘ সময় ব্যবহার করা যায়, বাসা-বাড়ি ও অফিসের জন্য উপযোগী।">
         <div class="p-visual">
           <span class="p-tag">বেস্ট সেলার</span>
           <img class="p-img" src="water-dispenser.jpg" alt="অটোমেটিক ওয়াটার ডিসপেনসার">
@@ -532,7 +535,8 @@
       </div>
 
       <!-- Handheld Fan -->
-      <div class="p-card">
+      <div class="p-card" data-id="neck-fan" data-img="neck-fan.jpg" data-name="K801 হ্যান্ডহেল্ড কুলিং টার্বো ফ্যান" data-price="850" data-tag="নতুন"
+        data-desc="পোর্টেবল ডিজিটাল ডিসপ্লেসহ শক্তিশালী টার্বো ফ্যান — গরমে সহজে বহনযোগ্য ঠান্ডা বাতাসের সমাধান। রিচার্জেবল ব্যাটারি, একাধিক স্পিড মোড, হালকা ও বহনে সুবিধাজনক ডিজাইন।">
         <div class="p-visual">
           <span class="p-tag">নতুন</span>
           <img class="p-img" src="neck-fan.jpg" alt="K801 হ্যান্ডহেল্ড কুলিং টার্বো ফ্যান">
@@ -548,7 +552,8 @@
       </div>
 
       <!-- Headphone -->
-      <div class="p-card">
+      <div class="p-card" data-id="headphone" data-img="headphone.jpg" data-name="ওয়্যারলেস ওভার-ইয়ার হেডফোন" data-price="1400" data-tag="ফিচার্ড"
+        data-desc="প্রিমিয়াম সাউন্ড কোয়ালিটি ও আরামদায়ক কুশনযুক্ত ইয়ারকাপ — AirPods Max স্টাইল ডিজাইনে তৈরি ব্লুটুথ হেডফোন। নয়েজ আইসোলেশন, দীর্ঘস্থায়ী ব্যাটারি ব্যাকআপ ও ভাঁজযোগ্য ডিজাইন।">
         <div class="p-visual">
           <span class="p-tag">ফিচার্ড</span>
           <img class="p-img" src="headphone.jpg" alt="ওয়্যারলেস ওভার-ইয়ার হেডফোন">
@@ -740,7 +745,18 @@
   });
 
   // ================= CART =================
-  let cart = []; // { name, price, qty }
+  const CART_KEY = 'abdullahshop_cart'; // shared between index.html and product.html
+  function loadCartFromStorage(){
+    try{
+      const raw = localStorage.getItem(CART_KEY);
+      return raw ? JSON.parse(raw) : [];
+    }catch(err){ return []; }
+  }
+  function saveCartToStorage(){
+    try{ localStorage.setItem(CART_KEY, JSON.stringify(cart)); }catch(err){}
+  }
+
+  let cart = loadCartFromStorage(); // { name, price, qty }
 
   const cartOverlay = document.getElementById('cartOverlay');
   const cartDrawer = document.getElementById('cartDrawer');
@@ -767,21 +783,33 @@
   document.getElementById('cartCloseBtn').addEventListener('click', closeCart);
   cartOverlay.addEventListener('click', closeCart);
 
-  document.querySelectorAll('.add-cart-btn').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const name = btn.dataset.name;
-      const price = parseInt(btn.dataset.price, 10);
-      const existing = cart.find(i => i.name === name);
-      if(existing){
-        existing.qty += 1;
-      } else {
-        cart.push({name, price, qty:1});
-      }
-      renderCart();
+  function addToCart(name, price, btn){
+    const existing = cart.find(i => i.name === name);
+    if(existing){
+      existing.qty += 1;
+    } else {
+      cart.push({name, price, qty:1});
+    }
+    renderCart();
+    if(btn){
       const oldText = btn.textContent;
       btn.textContent = "যোগ হয়েছে ✓";
       setTimeout(()=>{ btn.textContent = oldText; }, 1200);
-      openCart();
+    }
+    openCart();
+  }
+
+  document.querySelectorAll('.add-cart-btn').forEach(btn=>{
+    btn.addEventListener('click', (e)=>{
+      e.stopPropagation(); // don't also trigger the card's detail-view click
+      addToCart(btn.dataset.name, parseInt(btn.dataset.price, 10), btn);
+    });
+  });
+
+  // Clicking a product card goes to its own details page (product.html?id=...)
+  document.querySelectorAll('.p-card').forEach(card=>{
+    card.addEventListener('click', ()=>{
+      window.location.href = 'product.html?id=' + encodeURIComponent(card.dataset.id);
     });
   });
 
@@ -799,6 +827,7 @@
   }
 
   function renderCart(){
+    saveCartToStorage();
     // badge
     const totalQty = cart.reduce((s,i)=>s+i.qty, 0);
     cartBadge.textContent = totalQty;
