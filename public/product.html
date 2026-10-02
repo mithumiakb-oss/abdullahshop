@@ -127,30 +127,6 @@
 </main>
 
 <script>
-  const PRODUCTS = {
-    'water-dispenser': {
-      name: 'অটোমেটিক ওয়াটার ডিসপেনসার',
-      price: 550,
-      tag: 'বেস্ট সেলার',
-      img: 'water-dispenser.jpg',
-      desc: 'বোতলের পানি সহজে ও পরিষ্কারভাবে বের করার জন্য USB চার্জেবল অটোমেটিক পাম্প। ব্যবহার করা সহজ ও নিরাপদ — এক চার্জে দীর্ঘ সময় ব্যবহার করা যায়, বাসা-বাড়ি ও অফিসের জন্য উপযোগী।'
-    },
-    'neck-fan': {
-      name: 'K801 হ্যান্ডহেল্ড কুলিং টার্বো ফ্যান',
-      price: 850,
-      tag: 'নতুন',
-      img: 'neck-fan.jpg',
-      desc: 'পোর্টেবল ডিজিটাল ডিসপ্লেসহ শক্তিশালী টার্বো ফ্যান — গরমে সহজে বহনযোগ্য ঠান্ডা বাতাসের সমাধান। রিচার্জেবল ব্যাটারি, একাধিক স্পিড মোড, হালকা ও বহনে সুবিধাজনক ডিজাইন।'
-    },
-    'headphone': {
-      name: 'ওয়্যারলেস ওভার-ইয়ার হেডফোন',
-      price: 1400,
-      tag: 'ফিচার্ড',
-      img: 'headphone.jpg',
-      desc: 'প্রিমিয়াম সাউন্ড কোয়ালিটি ও আরামদায়ক কুশনযুক্ত ইয়ারকাপ — AirPods Max স্টাইল ডিজাইনে তৈরি ব্লুটুথ হেডফোন। নয়েজ আইসোলেশন, দীর্ঘস্থায়ী ব্যাটারি ব্যাকআপ ও ভাঁজযোগ্য ডিজাইন।'
-    }
-  };
-
   const CART_KEY = 'abdullahshop_cart';
   function loadCart(){
     try{ const raw = localStorage.getItem(CART_KEY); return raw ? JSON.parse(raw) : []; }
@@ -166,12 +142,21 @@
   }
   function formatTaka(n){ return '৳' + n.toLocaleString('en-US'); }
 
-  // Read ?id= from URL
+  // Read ?id= from URL, then fetch that product from the API
   const params = new URLSearchParams(window.location.search);
   const id = params.get('id');
-  const product = PRODUCTS[id];
   const content = document.getElementById('pdContent');
 
+  async function loadProduct(){
+    let product = null;
+    try{
+      const res = await fetch('/api/products?id=' + encodeURIComponent(id));
+      if(res.ok){ product = await res.json(); }
+    }catch(err){ /* leave product as null */ }
+    renderProduct(product);
+  }
+
+  function renderProduct(product){
   if(!product){
     content.innerHTML += `
       <div class="not-found">
@@ -225,7 +210,9 @@
       setTimeout(()=>{ msg.style.display = 'none'; }, 2500);
     });
   }
+  } // end renderProduct
 
+  loadProduct();
   updateCartBadge();
 </script>
 
