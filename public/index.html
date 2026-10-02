@@ -515,6 +515,874 @@
       <button>হেডফোন</button>
     </div>
 
+    <div class="product-grid" id="productGrid">
+      <p style="color:var(--ink-soft);">পণ্য লোড হচ্ছে...</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="about">
+  <div class="section-inner">
+    <div class="about-wrap">
+      <div>
+        <h2>AbdullahShop.com সম্পর্কে</h2>
+        <p>আমরা একটি বিশ্বস্ত অনলাইন দোকান, যেখানে দৈনন্দিন প্রয়োজনীয় পণ্য থেকে শুরু করে বড় কেনাকাটা — সবকিছু পাবেন এক ছাদের নিচে।</p>
+        <p>আমাদের লক্ষ্য সহজ: সঠিক দামে আসল পণ্য, দ্রুত ডেলিভারি এবং বিশ্বাসযোগ্য সেবা।</p>
+      </div>
+      <ul class="about-points">
+        <li><span class="dot">✓</span> ১০০% আসল ও যাচাইকৃত পণ্য</li>
+        <li><span class="dot">৳</span> ক্যাশ অন ডেলিভারি সুবিধা</li>
+        <li><span class="dot">🚚</span> সারা দেশে হোম ডেলিভারি</li>
+        <li><span class="dot">☎</span> সরাসরি ফোনে অর্ডার সাপোর্ট</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="order">
+  <div class="section-inner">
+    <div class="order-wrap">
+      <div class="order-info">
+        <h2>অর্ডার করতে চান?</h2>
+        <p>নিচের ফর্মটি পূরণ করুন, আমরা দ্রুত আপনার সাথে যোগাযোগ করবো অর্ডার নিশ্চিত করতে।</p>
+        <ul>
+          <li><span class="ic">1</span> ফর্মটি পূরণ করুন</li>
+          <li><span class="ic">2</span> আমরা ফোনে যোগাযোগ করবো</li>
+          <li><span class="ic">3</span> ক্যাশ অন ডেলিভারিতে পণ্য বুঝে নিন</li>
+        </ul>
+      </div>
+
+      <form class="order-form" id="orderForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="custName">আপনার নাম</label>
+            <input id="custName" type="text" name="name" placeholder="নাম লিখুন" autocomplete="name" required>
+          </div>
+          <div class="form-group">
+            <label for="custPhone">মোবাইল নম্বর</label>
+            <input id="custPhone" type="tel" name="phone" placeholder="01XXXXXXXXX" autocomplete="tel"
+              pattern="01[0-9]{9}" title="সঠিক বাংলাদেশি মোবাইল নম্বর দিন (যেমন: 01712345678)" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label id="selectedProductsLabel">নির্বাচিত পণ্যসমূহ</label>
+          <div class="selected-products-box" id="selectedProductsBox" role="group" aria-labelledby="selectedProductsLabel">
+            <span class="empty-note">এখনো কোনো পণ্য কার্টে যোগ করা হয়নি — উপরে "পণ্য" সেকশন থেকে কার্টে যোগ করুন।</span>
+          </div>
+          <input type="hidden" name="product" id="productHiddenInput">
+        </div>
+        <div class="form-group">
+          <label for="custAddress">ঠিকানা</label>
+          <textarea id="custAddress" name="address" placeholder="সম্পূর্ণ ঠিকানা লিখুন" autocomplete="street-address" required></textarea>
+        </div>
+        <button type="submit" class="submit-btn" id="submitBtn">অর্ডার নিশ্চিত করুন</button>
+        <div class="form-msg" id="formMsg" role="status" aria-live="polite">ধন্যবাদ! আপনার অর্ডার সফলভাবে জমা হয়েছে। শীঘ্রই যোগাযোগ করা হবে।</div>
+        <noscript>
+          <p style="margin-top:12px; color:#C0392B;">অর্ডার ফর্মটি কাজ করার জন্য ব্রাউজারে JavaScript চালু রাখতে হবে। অথবা সরাসরি ফোনে কল করুন।</p>
+        </noscript>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="footer-inner">
+    <div>
+      <div class="brand">AbdullahShop.com</div>
+      <p>আপনার বিশ্বস্ত অনলাইন কেনাকাটার ঠিকানা। মানসম্মত পণ্য, ন্যায্য দাম, নির্ভরযোগ্য সেবা।</p>
+    </div>
+    <div>
+      <h3>দ্রুত লিংক</h3>
+      <ul>
+        <li><a href="#products">পণ্য তালিকা</a></li>
+        <li><a href="#about">আমাদের সম্পর্কে</a></li>
+        <li><a href="#order">অর্ডার করুন</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3>যোগাযোগ</h3>
+      <ul>
+        <li>📞 ০১৭৬৬১০০৭০৯</li>
+        <li>✉️ infoabdullahshop@gmail.com</li>
+        <li>📍 ময়মনসিংহ, বাংলাদেশ</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2026 AbdullahShop.com — সর্বস্বত্ব সংরক্ষিত।</div>
+</footer>
+
+<script>
+  // Category filter tabs (visual only demo)
+  document.querySelectorAll('.cat-tabs button').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.cat-tabs button').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  // Order form submit — sends data to Google Apps Script (Sheet + Email)
+  // ⚠️ নিচের URL টা বদলে আপনার নিজের Apps Script deploy URL বসান
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxpPLOwKBzvmhXxX1kwuHDlMeKBdQmmqX5mvJ-rx37ZEhF1i0ksECy5m7uHrut6LUNJ/exec";
+
+  const form = document.getElementById('orderForm');
+  const msg = document.getElementById('formMsg');
+  const submitBtn = document.getElementById('submitBtn');
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    const productField = document.getElementById('productHiddenInput');
+    if(!productField.value){
+      alert("অনুগ্রহ করে আগে পণ্য সেকশন থেকে কার্টে অন্তত একটি পণ্য যোগ করুন।");
+      return;
+    }
+    submitBtn.disabled = true;
+    submitBtn.textContent = "পাঠানো হচ্ছে...";
+
+    const formData = new FormData(form);
+
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: formData
+    })
+    .then(()=>{
+      msg.style.display = 'block';
+      form.reset();
+      cart = [];
+      renderCart();
+      submitBtn.disabled = false;
+      submitBtn.textContent = "অর্ডার নিশ্চিত করুন";
+      setTimeout(()=>{ msg.style.display='none'; }, 5000);
+    })
+    .catch(()=>{
+      alert("দুঃখিত, অর্ডার পাঠাতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
+      submitBtn.disabled = false;
+      submitBtn.textContent = "অর্ডার নিশ্চিত করুন";
+    });
+  });
+
+  // Header search — filters product cards live
+  const siteSearchInput = document.getElementById('siteSearchInput');
+  if(siteSearchInput){
+    siteSearchInput.addEventListener('input', ()=>{
+      const q = siteSearchInput.value.trim().toLowerCase();
+      document.querySelectorAll('.p-card').forEach(card=>{
+        const name = card.querySelector('h3').textContent.toLowerCase();
+        card.style.display = name.includes(q) ? '' : 'none';
+      });
+    });
+    siteSearchInput.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter'){
+        e.preventDefault();
+        document.getElementById('products').scrollIntoView({behavior:'smooth'});
+      }
+    });
+  }
+
+  // Mobile hamburger menu toggle
+  const menuToggle = document.getElementById('menuToggle');
+  const mainNav = document.getElementById('mainNav');
+  menuToggle.addEventListener('click', ()=>{
+    menuToggle.classList.toggle('open');
+    mainNav.classList.toggle('open');
+  });
+  mainNav.querySelectorAll('a').forEach(link=>{
+    link.addEventListener('click', ()=>{
+      menuToggle.classList.remove('open');
+      mainNav.classList.remove('open');
+    });
+  });
+
+  // ================= CART =================
+  const CART_KEY = 'abdullahshop_cart'; // shared between index.html and product.html
+  function loadCartFromStorage(){
+    try{
+      const raw = localStorage.getItem(CART_KEY);
+      return raw ? JSON.parse(raw) : [];
+    }catch(err){ return []; }
+  }
+  function saveCartToStorage(){
+    try{ localStorage.setItem(CART_KEY, JSON.stringify(cart)); }catch(err){}
+  }
+
+  let cart = loadCartFromStorage(); // { name, price, qty }
+
+  const cartOverlay = document.getElementById('cartOverlay');
+  const cartDrawer = document.getElementById('cartDrawer');
+  const cartBadge = document.getElementById('cartBadge');
+  const cartItemsWrap = document.getElementById('cartItemsWrap');
+  const cartTotalEl = document.getElementById('cartTotal');
+  const selectedProductsBox = document.getElementById('selectedProductsBox');
+  const productHiddenInput = document.getElementById('productHiddenInput');
+
+  function formatTaka(n){
+    return '৳' + n.toLocaleString('en-US');
+  }
+
+  function openCart(){
+    cartOverlay.classList.add('open');
+    cartDrawer.classList.add('open');
+  }
+  function closeCart(){
+    cartOverlay.classList.remove('open');
+    cartDrawer.classList.remove('open');
+  }
+
+  document.getElementById('cartOpenBtn').addEventListener('click', openCart);
+  document.getElementById('cartCloseBtn').addEventListener('click', closeCart);
+  cartOverlay.addEventListener('click', closeCart);
+
+  function addToCart(name, price, btn){
+    const existing = cart.find(i => i.name === name);
+    if(existing){
+      existing.qty += 1;
+    } else {
+      cart.push({name, price, qty:1});
+    }
+    renderCart();
+    if(btn){
+      const oldText = btn.textContent;
+      btn.textContent = "যোগ হয়েছে ✓";
+      setTimeout(()=>{ btn.textContent = oldText; }, 1200);
+    }
+    openCart();
+  }
+
+  // ================= PRODUCTS (loaded from /api/products) =================
+  const productGrid = document.getElementById('productGrid');
+
+  function productCardHTML(p){
+    return `
+      <div class="p-card" data-id="${p.id}" data-img="${p.img}" data-name="${p.name}" data-price="${p.price}" data-tag="${p.tag || ''}" data-desc="${p.desc || ''}">
+        <div class="p-visual">
+          <span class="p-tag">${p.tag || ''}</span>
+          <img class="p-img" src="${p.img}" alt="${p.name}">
+        </div>
+        <div class="p-body">
+          <h3>${p.name}</h3>
+          <p>${p.desc || ''}</p>
+          <div class="price-row">
+            <div class="price">${formatTaka(p.price)}</div>
+            <button class="buy-btn add-cart-btn" data-name="${p.name}" data-price="${p.price}">কার্টে যোগ করুন</button>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  async function loadProducts(){
+    try{
+      const res = await fetch('/api/products');
+      const products = await res.json();
+      if(!Array.isArray(products) || products.length === 0){
+        productGrid.innerHTML = '<p style="color:var(--ink-soft);">এখনো কোনো পণ্য যোগ করা হয়নি।</p>';
+        return;
+      }
+      productGrid.innerHTML = products.map(productCardHTML).join('');
+    }catch(err){
+      productGrid.innerHTML = '<p style="color:var(--ink-soft);">পণ্য লোড করতে সমস্যা হয়েছে।</p>';
+    }
+  }
+  loadProducts();
+
+  // Event delegation — works for cards added dynamically after fetch
+  productGrid.addEventListener('click', (e)=>{
+    const btn = e.target.closest('.add-cart-btn');
+    if(btn){
+      addToCart(btn.dataset.name, parseInt(btn.dataset.price, 10), btn);
+      return;
+    }
+    const card = e.target.closest('.p-card');
+    if(card){
+      window.location.href = 'product.html?id=' + encodeURIComponent(card.dataset.id);
+    }
+  });
+
+  function changeQty(index, delta){
+    cart[index].qty += delta;
+    if(cart[index].qty <= 0){
+      cart.splice(index, 1);
+    }
+    renderCart();
+  }
+
+  function removeItem(index){
+    cart.splice(index, 1);
+    renderCart();
+  }
+
+  function renderCart(){
+    saveCartToStorage();
+    // badge
+    const totalQty = cart.reduce((s,i)=>s+i.qty, 0);
+    cartBadge.textContent = totalQty;
+
+    // drawer items
+    if(cart.length === 0){
+      cartItemsWrap.innerHTML = '<p class="cart-empty">কার্ট এখনো খালি</p>';
+    } else {
+      cartItemsWrap.innerHTML = cart.map((item, idx) => `
+        <div class="cart-item">
+          <div style="flex:1;">
+            <div class="cart-item-name">${item.name}</div>
+            <div class="cart-item-price">${formatTaka(item.price * item.qty)}</div>
+          </div>
+          <div class="cart-qty">
+            <button type="button" onclick="cartChangeQty(${idx},-1)">−</button>
+            <span>${item.qty}</span>
+            <button type="button" onclick="cartChangeQty(${idx},1)">+</button>
+          </div>
+          <button type="button" class="cart-remove" onclick="cartRemoveItem(${idx})">মুছুন</button>
+        </div>
+      `).join('');
+    }
+
+    const total = cart.reduce((s,i)=>s + (i.price*i.qty), 0);
+    cartTotalEl.textContent = formatTaka(total);
+
+    // order form summary box
+    if(cart.length === 0){
+      selectedProductsBox.innerHTML = '<span class="empty-note">এখনো কোনো পণ্য কার্টে যোগ করা হয়নি — উপরে "পণ্য" সেকশন থেকে কার্টে যোগ করুন।</span>';
+      productHiddenInput.value = '';
+    } else {
+      let lines = cart.map(i => `<div class="selected-line"><span>${i.name} × ${i.qty}</span><span>${formatTaka(i.price*i.qty)}</span></div>`).join('');
+      lines += `<div class="selected-total"><span>মোট</span><span>${formatTaka(total)}</span></div>`;
+      selectedProductsBox.innerHTML = lines;
+
+      productHiddenInput.value = cart.map(i => `${i.name} x${i.qty} (${formatTaka(i.price*i.qty)})`).join(', ') + ` | সর্বমোট: ${formatTaka(total)}`;
+    }
+  }
+
+  // expose for inline onclick handlers
+  window.cartChangeQty = changeQty;
+  window.cartRemoveItem = removeItem;
+
+  document.getElementById('cartCheckoutBtn').addEventListener('click', ()=>{
+    closeCart();
+    document.getElementById('order').scrollIntoView({behavior:'smooth'});
+  });
+
+  renderCart();
+</script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AbdullahShop.com — আপনার পছন্দের অনলাইন দোকান</title>
+<meta name="description" content="AbdullahShop.com — অটোমেটিক ওয়াটার ডিসপেনসার, হ্যান্ডহেল্ড কুলিং ফ্যান ও ওয়্যারলেস হেডফোন সহ প্রয়োজনীয় সবকিছু এক জায়গায়, ক্যাশ অন ডেলিভারিতে সারাদেশে।">
+
+<!-- Social share preview -->
+<meta property="og:title" content="AbdullahShop.com — আপনার পছন্দের অনলাইন দোকান">
+<meta property="og:description" content="অটোমেটিক ওয়াটার ডিসপেনসার, হ্যান্ডহেল্ড কুলিং ফ্যান ও ওয়্যারলেস হেডফোন সহ প্রয়োজনীয় সবকিছু এক জায়গায়।">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mithumiakb-oss.github.io/abdullahshop/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AbdullahShop.com">
+<meta name="twitter:description" content="অটোমেটিক ওয়াটার ডিসপেনসার, কুলিং ফ্যান ও হেডফোন — এক জায়গায়।">
+
+<!-- Favicon (shopping bag emoji as a quick favicon) -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛍️</text></svg>">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --forest:#0F1B3D;
+    --emerald:#2F6FED;
+    --emerald-light:#5B93FF;
+    --gold:#FF7A29;
+    --gold-dark:#E85D0A;
+    --paper:#F3F6FD;
+    --paper-2:#E4EBFB;
+    --ink:#101828;
+    --ink-soft:#57607A;
+    --white:#FFFFFF;
+    --radius:18px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible{
+    outline:3px solid var(--gold-dark); outline-offset:2px;
+  }
+  .skip-link{
+    position:absolute; left:-9999px; top:auto; background:var(--forest); color:var(--white);
+    padding:12px 20px; border-radius:0 0 10px 0; z-index:200; font-weight:700;
+  }
+  .skip-link:focus{left:0; top:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Hind Siliguri', sans-serif;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.brand{font-family:'Baloo Da 2', sans-serif;}
+  a{text-decoration:none;color:inherit;}
+  ul{list-style:none;}
+  img,svg{display:block;max-width:100%;}
+
+  /* ===== decorative bag pattern background ===== */
+  .bagline{
+    position:absolute; inset:0; z-index:0; opacity:0.05; pointer-events:none;
+    background-image:repeating-linear-gradient(115deg, transparent 0 60px, var(--forest) 60px 61px);
+  }
+
+  /* ===== HEADER ===== */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(250,246,236,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:2px solid var(--paper-2);
+  }
+  .nav-wrap{
+    max-width:1180px; margin:0 auto; padding:14px 24px;
+    display:flex; align-items:center; justify-content:space-between;
+    position:relative;
+  }
+  .logo-group{display:flex; align-items:center; gap:10px;}
+  .logo-group .brand{font-size:1.5rem; font-weight:700; color:var(--forest);}
+  .logo-group .brand span{color:var(--emerald);}
+  .header-search{
+    display:flex; align-items:center; gap:10px; background:var(--paper-2);
+    border-radius:999px; padding:9px 18px; flex:1; max-width:320px; margin:0 24px;
+  }
+  .header-search input{
+    border:none; background:none; outline:none; font-family:'Hind Siliguri'; font-size:.92rem;
+    color:var(--ink); width:100%;
+  }
+  .header-search input::placeholder{color:var(--ink-soft);}
+  nav ul{display:flex; gap:28px;}
+  nav a{font-weight:600; color:var(--ink-soft); transition:color .2s;}
+  nav a:hover{color:var(--emerald);}
+  .nav-cta{
+    background:var(--gold); color:var(--forest); font-weight:700;
+    padding:10px 22px; border-radius:999px; font-size:.95rem;
+    box-shadow:0 3px 0 var(--gold-dark);
+    transition:transform .15s;
+  }
+  .nav-cta:hover{transform:translateY(-2px);}
+  .menu-toggle{
+    display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer;
+    padding:8px; margin-left:4px;
+  }
+  .menu-toggle span{width:24px; height:3px; background:var(--forest); border-radius:3px; transition:.25s;}
+  .menu-toggle.open span:nth-child(1){transform:translateY(8px) rotate(45deg);}
+  .menu-toggle.open span:nth-child(2){opacity:0;}
+  .menu-toggle.open span:nth-child(3){transform:translateY(-8px) rotate(-45deg);}
+
+  /* ===== HERO ===== */
+  .hero{
+    position:relative; overflow:hidden;
+    padding:70px 24px 100px;
+  }
+  .hero-inner{
+    max-width:1180px; margin:0 auto;
+    display:grid; grid-template-columns:1.1fr 0.9fr; gap:40px; align-items:center;
+    position:relative; z-index:2;
+  }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--paper-2); color:var(--forest); font-weight:700;
+    padding:6px 16px; border-radius:999px; font-size:.85rem; margin-bottom:18px;
+  }
+  .eyebrow::before{content:"●"; color:var(--gold); font-size:.7rem;}
+  .hero h1{
+    font-size:3.1rem; line-height:1.15; color:var(--forest); font-weight:700;
+    margin-bottom:20px;
+  }
+  .hero h1 .accent{color:var(--emerald); position:relative; display:inline-block;}
+  .hero p.lead{font-size:1.15rem; color:var(--ink-soft); max-width:520px; margin-bottom:32px;}
+  .hero-btns{display:flex; gap:16px; flex-wrap:wrap;}
+  .btn-primary{
+    background:var(--forest); color:var(--white); font-weight:700; padding:15px 32px;
+    border-radius:999px; font-size:1.05rem; box-shadow:0 4px 0 #073b22;
+    transition:transform .15s;
+  }
+  .btn-primary:hover{transform:translateY(-2px);}
+  .btn-secondary{
+    border:2px solid var(--forest); color:var(--forest); font-weight:700; padding:13px 30px;
+    border-radius:999px; font-size:1.05rem; transition:.2s;
+  }
+  .btn-secondary:hover{background:var(--forest); color:var(--white);}
+
+  .hero-visual{position:relative; display:flex; justify-content:center;}
+  .bag-badge{
+    width:100%; max-width:360px; filter:drop-shadow(0 20px 30px rgba(15,81,50,.25));
+    animation:float 4s ease-in-out infinite;
+  }
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+
+  .stat-row{
+    max-width:1180px; margin:60px auto 0; padding:0 24px;
+    display:flex; gap:40px; flex-wrap:wrap; position:relative; z-index:2;
+    border-top:2px dashed var(--paper-2); padding-top:36px;
+  }
+  .stat-row div{min-width:140px;}
+  .stat-row strong{font-family:'Baloo Da 2'; font-size:1.8rem; color:var(--forest); display:block;}
+  .stat-row span{color:var(--ink-soft); font-size:.9rem;}
+
+  .quick-tiles{
+    display:grid; grid-template-columns:repeat(4, 1fr); gap:18px;
+  }
+  .quick-tile{
+    display:flex; align-items:center; gap:14px; background:var(--white); border:1px solid var(--paper-2);
+    border-radius:14px; padding:16px 18px; box-shadow:0 4px 14px rgba(15,27,61,.05); transition:.2s;
+  }
+  .quick-tile:hover{transform:translateY(-3px); box-shadow:0 10px 22px rgba(15,27,61,.1);}
+  .qt-icon{
+    width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center;
+    font-size:1.3rem; flex-shrink:0;
+  }
+  .quick-tile strong{display:block; color:var(--forest); font-size:.95rem; font-family:'Hind Siliguri'; font-weight:700;}
+  .quick-tile span{color:var(--emerald); font-size:.8rem; font-weight:600;}
+  @media (max-width:700px){ .quick-tiles{grid-template-columns:1fr 1fr;} }
+
+  /* ===== SECTION TITLES ===== */
+  .section{padding:90px 24px;}
+  .section-inner{max-width:1180px; margin:0 auto;}
+  .section-head{max-width:640px; margin-bottom:50px;}
+  .section-head .tag{color:var(--gold-dark); font-weight:700; letter-spacing:.5px; font-size:.9rem; margin-bottom:10px; display:block;}
+  .section-head h2{font-size:2.3rem; color:var(--forest); font-weight:700; margin-bottom:14px;}
+  .section-head p{color:var(--ink-soft); font-size:1.05rem;}
+
+  /* ===== ABOUT ===== */
+  .about-wrap{
+    background:var(--forest); border-radius:28px; padding:60px; color:var(--white);
+    display:grid; grid-template-columns:1fr 1fr; gap:50px; align-items:center;
+    position:relative; overflow:hidden;
+  }
+  .about-wrap::after{
+    content:""; position:absolute; width:340px; height:340px; border-radius:50%;
+    background:radial-gradient(circle, rgba(232,163,61,.25), transparent 70%);
+    top:-100px; right:-100px;
+  }
+  .about-wrap h2{color:var(--white); font-size:2.1rem; margin-bottom:18px;}
+  .about-wrap p{color:#E4EFE7; font-size:1.05rem; margin-bottom:16px;}
+  .about-points{display:flex; flex-direction:column; gap:16px; position:relative; z-index:2;}
+  .about-points li{display:flex; gap:14px; align-items:flex-start; color:#E4EFE7;}
+  .about-points .dot{
+    min-width:34px; height:34px; border-radius:10px; background:var(--gold);
+    display:flex; align-items:center; justify-content:center; color:var(--forest); font-weight:800;
+  }
+
+  /* ===== PRODUCTS ===== */
+  .cat-tabs{display:flex; gap:12px; margin-bottom:40px; flex-wrap:wrap;}
+  .cat-tabs button{
+    background:var(--white); border:2px solid var(--paper-2); font-family:'Hind Siliguri';
+    font-weight:600; padding:10px 22px; border-radius:999px; cursor:pointer; color:var(--ink-soft);
+    transition:.2s;
+  }
+  .cat-tabs button.active, .cat-tabs button:hover{background:var(--forest); border-color:var(--forest); color:var(--white);}
+
+  .product-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:28px;}
+  .p-card{
+    background:var(--white); border-radius:var(--radius); overflow:hidden;
+    box-shadow:0 8px 24px rgba(15,81,50,.07); border:1px solid var(--paper-2);
+    transition:transform .2s, box-shadow .2s; display:flex; flex-direction:column;
+    cursor:pointer;
+  }
+
+  .p-card:hover{transform:translateY(-6px); box-shadow:0 16px 32px rgba(15,81,50,.15);}
+  .p-visual{
+    background:linear-gradient(135deg, var(--paper-2), var(--paper));
+    height:210px; display:flex; align-items:center; justify-content:center; position:relative;
+  }
+  .p-visual svg{width:65%; height:65%;}
+  .p-img{width:100%; height:100%; object-fit:contain; padding:16px;}
+  .p-tag{
+    position:absolute; top:14px; left:14px; background:var(--gold); color:var(--forest);
+    font-weight:700; font-size:.78rem; padding:5px 12px; border-radius:999px;
+  }
+  .p-body{padding:22px; display:flex; flex-direction:column; gap:10px; flex:1;}
+  .p-body h3{font-size:1.15rem; color:var(--forest); font-family:'Hind Siliguri'; font-weight:700;}
+  .p-body p{color:var(--ink-soft); font-size:.92rem; flex:1;}
+  .price-row{display:flex; align-items:center; justify-content:space-between; margin-top:6px;}
+  .price{font-family:'Baloo Da 2'; font-size:1.3rem; color:var(--forest); font-weight:700;}
+  .price small{font-size:.8rem; color:var(--ink-soft); font-weight:400; text-decoration:line-through; margin-right:6px; font-family:'Hind Siliguri';}
+  .buy-btn{
+    background:var(--emerald); color:var(--white); font-weight:700; padding:10px 20px;
+    border:none; border-radius:999px; font-family:'Hind Siliguri'; cursor:pointer; font-size:.92rem;
+    transition:.2s;
+  }
+  .buy-btn:hover{background:var(--forest);}
+
+  /* ===== CART ===== */
+  .cart-icon-btn{
+    position:relative; display:flex; align-items:center; justify-content:center;
+    width:44px; height:44px; border-radius:50%; background:var(--paper-2); border:none; cursor:pointer;
+    transition:.2s; margin-right:6px;
+  }
+  .cart-icon-btn:hover{background:var(--forest);}
+  .cart-icon-btn:hover svg path, .cart-icon-btn:hover svg circle{stroke:var(--white);}
+  .cart-icon-btn svg{width:22px; height:22px;}
+  .cart-badge{
+    position:absolute; top:-4px; right:-4px; background:var(--gold); color:var(--forest);
+    font-size:.68rem; font-weight:800; min-width:18px; height:18px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; padding:0 3px;
+  }
+  .cart-overlay{
+    position:fixed; inset:0; background:rgba(15,20,17,.5); z-index:90; display:none;
+  }
+  .cart-overlay.open{display:block;}
+  .cart-drawer{
+    position:fixed; top:0; right:-420px; width:380px; max-width:90vw; height:100%; background:var(--white);
+    z-index:91; box-shadow:-8px 0 30px rgba(0,0,0,.15); transition:right .3s ease;
+    display:flex; flex-direction:column; padding:26px;
+  }
+  .cart-drawer.open{right:0;}
+  .cart-drawer-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;}
+  .cart-drawer-head h3{color:var(--forest); font-size:1.3rem;}
+  .cart-close{background:none; border:none; font-size:1.4rem; cursor:pointer; color:var(--ink-soft);}
+  .cart-items{flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:14px;}
+  .cart-empty{color:var(--ink-soft); text-align:center; margin-top:60px;}
+  .cart-item{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    padding:12px; background:var(--paper); border-radius:12px;
+  }
+  .cart-item-name{font-weight:600; font-size:.92rem; color:var(--ink); flex:1;}
+  .cart-item-price{font-family:'Baloo Da 2'; color:var(--forest); font-weight:700; font-size:.95rem;}
+  .cart-qty{display:flex; align-items:center; gap:8px;}
+  .cart-qty button{
+    width:24px; height:24px; border-radius:50%; border:1px solid var(--paper-2); background:var(--white);
+    cursor:pointer; font-weight:700; color:var(--forest); line-height:1;
+  }
+  .cart-remove{background:none; border:none; color:#C0392B; cursor:pointer; font-size:.85rem; font-weight:600;}
+  .cart-footer{border-top:2px dashed var(--paper-2); padding-top:18px; margin-top:14px;}
+  .cart-total-row{display:flex; justify-content:space-between; font-weight:700; color:var(--forest); font-size:1.1rem; margin-bottom:14px;}
+  .cart-checkout-btn{
+    width:100%; background:var(--forest); color:var(--white); font-weight:700; padding:14px;
+    border:none; border-radius:999px; font-family:'Hind Siliguri'; font-size:1rem; cursor:pointer;
+  }
+  .selected-products-box{
+    background:var(--paper); border:2px solid var(--paper-2); border-radius:10px; padding:14px;
+    display:flex; flex-direction:column; gap:8px; min-height:60px;
+  }
+  .selected-products-box .empty-note{color:var(--ink-soft); font-size:.9rem;}
+  .selected-line{display:flex; justify-content:space-between; font-size:.92rem; color:var(--ink);}
+  .selected-total{display:flex; justify-content:space-between; font-weight:700; color:var(--forest); border-top:1px dashed var(--paper-2); padding-top:8px; margin-top:4px;}
+
+  /* ===== ORDER FORM ===== */
+  .order-wrap{
+    display:grid; grid-template-columns:0.9fr 1.1fr; gap:50px; align-items:start;
+  }
+  .order-info h2{font-size:2.1rem; color:var(--forest); margin-bottom:16px;}
+  .order-info p{color:var(--ink-soft); margin-bottom:24px;}
+  .order-info ul{display:flex; flex-direction:column; gap:14px;}
+  .order-info li{display:flex; gap:12px; align-items:center; color:var(--ink-soft); font-weight:500;}
+  .order-info .ic{
+    width:38px; height:38px; border-radius:50%; background:var(--paper-2); color:var(--forest);
+    display:flex; align-items:center; justify-content:center; font-weight:800; flex-shrink:0;
+  }
+  form.order-form{
+    background:var(--white); border-radius:var(--radius); padding:36px;
+    box-shadow:0 8px 30px rgba(15,81,50,.1); border:1px solid var(--paper-2);
+  }
+  .form-row{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;}
+  .form-group{display:flex; flex-direction:column; gap:6px; margin-bottom:16px;}
+  label{font-weight:600; font-size:.9rem; color:var(--forest);}
+  input, select, textarea{
+    padding:12px 14px; border:2px solid var(--paper-2); border-radius:10px;
+    font-family:'Hind Siliguri'; font-size:.95rem; background:var(--paper); color:var(--ink);
+    outline:none; transition:.2s;
+  }
+  input:focus, select:focus, textarea:focus{border-color:var(--emerald);}
+  textarea{resize:vertical; min-height:80px;}
+  .submit-btn{
+    width:100%; background:var(--gold); color:var(--forest); font-weight:700; padding:15px;
+    border:none; border-radius:999px; font-family:'Hind Siliguri'; font-size:1.05rem; cursor:pointer;
+    box-shadow:0 4px 0 var(--gold-dark); transition:transform .15s;
+  }
+  .submit-btn:hover{transform:translateY(-2px);}
+  .form-msg{
+    margin-top:14px; padding:12px 16px; border-radius:10px; background:#E4F5EB; color:var(--forest);
+    font-weight:600; display:none; text-align:center;
+  }
+
+  /* ===== CONTACT / FOOTER ===== */
+  footer{background:var(--ink); color:#D8DBD6; padding:60px 24px 24px;}
+  .footer-inner{max-width:1180px; margin:0 auto; display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:40px;}
+  .footer-inner h3{color:var(--white); font-size:1.2rem; margin-bottom:14px; font-family:'Hind Siliguri';}
+  .footer-inner .brand{color:var(--emerald-light); font-size:1.4rem; margin-bottom:12px;}
+  .footer-inner p{color:#A9AFA5; font-size:.92rem; max-width:320px;}
+  .footer-inner ul li{margin-bottom:10px; color:#C4C9BF; font-size:.92rem;}
+  .footer-bottom{
+    max-width:1180px; margin:40px auto 0; padding-top:20px; border-top:1px solid #333;
+    text-align:center; color:#7d8378; font-size:.85rem;
+  }
+
+  @media (max-width: 900px){
+    .hero-inner{grid-template-columns:1fr;}
+    .hero h1{font-size:2.3rem;}
+    .menu-toggle{display:flex;}
+    .header-search{display:none;}
+    nav{
+      display:block; position:absolute; top:100%; left:0; right:0; background:var(--white);
+      border-bottom:2px solid var(--paper-2); box-shadow:0 12px 20px rgba(0,0,0,.06);
+      max-height:0; overflow:hidden; transition:max-height .25s ease;
+    }
+    nav.open{max-height:300px;}
+    nav ul{flex-direction:column; gap:0; padding:10px 24px;}
+    nav ul li{border-bottom:1px solid var(--paper-2);}
+    nav ul li a{display:block; padding:14px 4px;}
+    .about-wrap{grid-template-columns:1fr; padding:36px;}
+    .product-grid{grid-template-columns:1fr 1fr;}
+    .order-wrap{grid-template-columns:1fr;}
+    .form-row{grid-template-columns:1fr;}
+    .footer-inner{grid-template-columns:1fr;}
+  }
+  @media (max-width: 600px){
+    .product-grid{grid-template-columns:1fr;}
+    .hero h1{font-size:1.9rem;}
+  }
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">মূল কন্টেন্টে যান</a>
+<div id="top"></div>
+
+<header>
+  <div class="nav-wrap">
+    <div class="logo-group">
+      <svg width="38" height="38" viewBox="0 0 100 100" role="img" aria-labelledby="headerLogoTitle">
+        <title id="headerLogoTitle">AbdullahShop লোগো</title>
+        <defs>
+          <linearGradient id="bagGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#5B93FF"/>
+            <stop offset="100%" stop-color="#0F1B3D"/>
+          </linearGradient>
+        </defs>
+        <path d="M35 30 Q35 12 50 12 Q65 12 65 30" fill="none" stroke="#2F6FED" stroke-width="6" stroke-linecap="round"/>
+        <path d="M22 32 L78 32 L72 88 L28 88 Z" fill="url(#bagGrad)"/>
+        <path d="M22 32 L50 32 L45 88 L28 88 Z" fill="#5B93FF" opacity="0.5"/>
+        <text x="50" y="70" font-family="Baloo Da 2, sans-serif" font-size="42" font-weight="700" fill="#F3F6FD" text-anchor="middle">A</text>
+      </svg>
+      <div class="brand">Abdullah<span>Shop</span>.com</div>
+    </div>
+    <div class="header-search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#57607A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input type="text" id="siteSearchInput" placeholder="পণ্য খুঁজুন..." aria-label="পণ্য খুঁজুন">
+    </div>
+    <nav id="mainNav">
+      <ul>
+        <li><a href="#top">হোম</a></li>
+        <li><a href="#products">পণ্য</a></li>
+        <li><a href="#about">পরিচিতি</a></li>
+        <li><a href="#order">অর্ডার</a></li>
+        <li><a href="#contact">যোগাযোগ</a></li>
+      </ul>
+    </nav>
+    <div style="display:flex; align-items:center;">
+      <button class="cart-icon-btn" id="cartOpenBtn" aria-label="কার্ট">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#0F1B3D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="21" r="1"></circle>
+          <circle cx="20" cy="21" r="1"></circle>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+        </svg>
+        <span class="cart-badge" id="cartBadge">0</span>
+      </button>
+      <a href="#order" class="nav-cta">এখনই অর্ডার করুন</a>
+      <button class="menu-toggle" id="menuToggle" aria-label="মেনু"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="cart-overlay" id="cartOverlay"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-drawer-head">
+    <h3>আপনার কার্ট</h3>
+    <button class="cart-close" id="cartCloseBtn">✕</button>
+  </div>
+  <div class="cart-items" id="cartItemsWrap">
+    <p class="cart-empty">কার্ট এখনো খালি</p>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-total-row"><span>মোট</span><span id="cartTotal">৳০</span></div>
+    <button class="cart-checkout-btn" id="cartCheckoutBtn">অর্ডার করতে যান</button>
+  </div>
+</div>
+
+<section class="hero" id="main-content">
+  <div class="bagline"></div>
+  <div class="hero-inner">
+    <div>
+      <span class="eyebrow">বিশ্বস্ত অনলাইন শপ • সারা বাংলাদেশে ডেলিভারি</span>
+      <h1>আপনার প্রয়োজনের সবকিছু, <span class="accent">এক জায়গায়</span></h1>
+      <p class="lead">অটোমেটিক ওয়াটার ডিসপেনসার থেকে কুলিং ফ্যান, এমনকি ওয়্যারলেস হেডফোন পর্যন্ত — AbdullahShop.com এ পাবেন আসল পণ্য, সঠিক দামে, ঘরে বসে অর্ডারের সুবিধা।</p>
+      <div class="hero-btns">
+        <a href="#products" class="btn-primary">পণ্য দেখুন</a>
+        <a href="#order" class="btn-secondary">অর্ডার করুন</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <svg class="bag-badge" viewBox="0 0 300 300" role="img" aria-labelledby="heroBagTitle">
+        <title id="heroBagTitle">AbdullahShop ব্যাগ লোগো</title>
+        <defs>
+          <linearGradient id="heroBag" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#5B93FF"/>
+            <stop offset="100%" stop-color="#0F1B3D"/>
+          </linearGradient>
+        </defs>
+        <circle cx="150" cy="150" r="140" fill="#F1EAD6"/>
+        <path d="M105 95 Q105 55 150 55 Q195 55 195 95" fill="none" stroke="#2F6FED" stroke-width="10" stroke-linecap="round"/>
+        <path d="M70 100 L230 100 L215 235 L85 235 Z" fill="url(#heroBag)"/>
+        <path d="M70 100 L150 100 L138 235 L85 235 Z" fill="#5B93FF" opacity="0.45"/>
+        <text x="150" y="200" font-family="Baloo Da 2, sans-serif" font-size="110" font-weight="700" fill="#F3F6FD" text-anchor="middle">A</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div><strong>৫,০০০+</strong><span>সন্তুষ্ট ক্রেতা</span></div>
+    <div><strong>৩</strong><span>প্রধান ক্যাটাগরি</span></div>
+    <div><strong>৬৪</strong><span>জেলায় ডেলিভারি</span></div>
+    <div><strong>১০০%</strong><span>আসল পণ্যের নিশ্চয়তা</span></div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0;">
+  <div class="section-inner">
+    <div class="quick-tiles">
+      <a href="#products" class="quick-tile">
+        <span class="qt-icon" style="background:#FFE9D9; color:#E85D0A;">🏆</span>
+        <div><strong>বেস্ট সেলার</strong><span>এখনই দেখুন</span></div>
+      </a>
+      <a href="#products" class="quick-tile">
+        <span class="qt-icon" style="background:#DCE7FF; color:#2F6FED;">✨</span>
+        <div><strong>নতুন এসেছে</strong><span>এখনই দেখুন</span></div>
+      </a>
+      <a href="#products" class="quick-tile">
+        <span class="qt-icon" style="background:#FFE0EC; color:#D6336C;">⭐</span>
+        <div><strong>ফিচার্ড পণ্য</strong><span>এখনই দেখুন</span></div>
+      </a>
+      <a href="#order" class="quick-tile">
+        <span class="qt-icon" style="background:#E1F7EA; color:#1B9C5B;">🚚</span>
+        <div><strong>দ্রুত অর্ডার</strong><span>এখনই দেখুন</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="products">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="tag">আমাদের পণ্য</span>
+      <h2>যা কিছু পাবেন AbdullahShop এ</h2>
+      <p>প্রতিটি পণ্য যাচাই করে সংগ্রহ করা হয় — মানের সাথে কোনো আপোষ নেই।</p>
+    </div>
+
+    <div class="cat-tabs">
+      <button class="active">সব পণ্য</button>
+      <button>ওয়াটার ডিসপেনসার</button>
+      <button>কুলিং ফ্যান</button>
+      <button>হেডফোন</button>
+    </div>
+
     <div class="product-grid">
 
       <!-- Water Dispenser -->
