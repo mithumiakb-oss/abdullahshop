@@ -8,6 +8,6 @@
     "binding": "ASSETS"
   },
   "kv_namespaces": [
-    { "binding": "PRODUCTS_KV", "id": "PASTE_YOUR_KV_NAMESPACE_ID_HERE" }
+    { "binding": "PRODUCTS_KV", "id": "20874012e2b4405fa3bf528d72d8d3cb" }
   ]
 }
