@@ -52,7 +52,19 @@
     background:linear-gradient(135deg, var(--paper-2), var(--paper)); border-radius:22px;
     display:flex; align-items:center; justify-content:center; min-height:340px; padding:20px;
   }
-  .pd-image img{width:100%; max-height:340px; object-fit:contain;}
+  .pd-image img{width:100%; max-height:340px; object-fit:contain; cursor:zoom-in;}
+  .pd-thumbs{display:flex; gap:10px; margin-top:12px; flex-wrap:wrap;}
+  .pd-thumbs img{
+    width:64px; height:64px; object-fit:cover; border-radius:10px; cursor:pointer;
+    border:2px solid var(--paper-2); background:var(--white); padding:4px;
+  }
+  .pd-thumbs img.active-thumb{border-color:var(--emerald);}
+  .pd-lightbox{
+    position:fixed; inset:0; background:rgba(0,0,0,.8); z-index:200; display:none;
+    align-items:center; justify-content:center; padding:20px; cursor:zoom-out;
+  }
+  .pd-lightbox.open{display:flex;}
+  .pd-lightbox img{max-width:92vw; max-height:92vh; object-fit:contain;}
 
   .pd-tag{
     background:var(--gold); color:var(--forest); font-weight:700; font-size:.8rem; padding:6px 16px;
@@ -126,6 +138,10 @@
   <!-- content injected by JS -->
 </main>
 
+<div class="pd-lightbox" id="pdLightbox">
+  <img id="pdLightboxImg" src="" alt="">
+</div>
+
 <script>
   const CART_KEY = 'abdullahshop_cart';
   function loadCart(){
@@ -166,9 +182,17 @@
       </div>`;
   } else {
     document.title = product.name + ' — AbdullahShop.com';
+    const images = (product.images && product.images.length) ? product.images : [product.img];
+    const thumbsHTML = images.length > 1 ? `
+          <div class="pd-thumbs">
+            ${images.map((img, i) => `<img src="${img}" alt="${product.name} ${i+1}" data-idx="${i}" class="${i===0 ? 'active-thumb' : ''}">`).join('')}
+          </div>` : '';
     content.innerHTML += `
       <div class="pd-wrap">
-        <div class="pd-image"><img src="${product.img}" alt="${product.name}"></div>
+        <div>
+          <div class="pd-image"><img id="pdMainImg" src="${images[0]}" alt="${product.name}"></div>
+          ${thumbsHTML}
+        </div>
         <div class="pd-info">
           <span class="pd-tag">${product.tag}</span>
           <h1>${product.name}</h1>
@@ -189,6 +213,25 @@
           <p class="added-msg" id="addedMsg">✓ কার্টে যোগ হয়েছে!</p>
         </div>
       </div>`;
+
+    // Thumbnail gallery: click a thumbnail to change the main image
+    const mainImg = document.getElementById('pdMainImg');
+    document.querySelectorAll('.pd-thumbs img').forEach(thumb=>{
+      thumb.addEventListener('click', ()=>{
+        mainImg.src = thumb.src;
+        document.querySelectorAll('.pd-thumbs img').forEach(t=>t.classList.remove('active-thumb'));
+        thumb.classList.add('active-thumb');
+      });
+    });
+
+    // Click the main image to zoom in (lightbox)
+    const lightbox = document.getElementById('pdLightbox');
+    const lightboxImg = document.getElementById('pdLightboxImg');
+    mainImg.addEventListener('click', ()=>{
+      lightboxImg.src = mainImg.src;
+      lightbox.classList.add('open');
+    });
+    lightbox.addEventListener('click', ()=> lightbox.classList.remove('open'));
 
     let qty = 1;
     const qtyVal = document.getElementById('qtyVal');
