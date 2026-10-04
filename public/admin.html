@@ -96,8 +96,8 @@
           <input type="text" id="prodTag">
         </div>
         <div class="full">
-          <label>ছবির ফাইলের নাম (GitHub এ আপলোড করা, যেমন: water-dispenser.jpg)</label>
-          <input type="text" id="prodImg" required>
+          <label>ছবির ফাইলের নাম (একাধিক দিলে কমা দিয়ে আলাদা করুন, যেমন: water-dispenser.jpg, water-dispenser-2.jpg)</label>
+          <textarea id="prodImg" required style="min-height:50px;"></textarea>
         </div>
         <div class="full">
           <label>বিবরণ</label>
@@ -187,7 +187,7 @@
     document.getElementById('prodName').value = p.name;
     document.getElementById('prodPrice').value = p.price;
     document.getElementById('prodTag').value = p.tag || '';
-    document.getElementById('prodImg').value = p.img;
+    document.getElementById('prodImg').value = (p.images && p.images.length ? p.images : [p.img]).join(', ');
     document.getElementById('prodDesc').value = p.desc || '';
     window.scrollTo({top:0, behavior:'smooth'});
   }
@@ -210,12 +210,14 @@
 
   document.getElementById('productForm').addEventListener('submit', async (e)=>{
     e.preventDefault();
+    const images = document.getElementById('prodImg').value.split(',').map(s=>s.trim()).filter(Boolean);
     const product = {
       id: document.getElementById('prodId').value.trim(),
       name: document.getElementById('prodName').value.trim(),
       price: parseInt(document.getElementById('prodPrice').value, 10),
       tag: document.getElementById('prodTag').value.trim(),
-      img: document.getElementById('prodImg').value.trim(),
+      img: images[0] || '',       // first image — used as the thumbnail on the product grid
+      images: images,              // full gallery — used on the product detail page
       desc: document.getElementById('prodDesc').value.trim()
     };
     const result = await apiCall({ action:'save', product });
