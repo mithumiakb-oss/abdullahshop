@@ -73,6 +73,13 @@
   .pd-info h1{color:var(--forest); font-size:1.9rem; font-weight:700; margin-bottom:14px;}
   .pd-info .pd-desc{color:var(--ink-soft); font-size:1.05rem; line-height:1.8; margin-bottom:22px;}
   .pd-price{font-family:'Baloo Da 2'; font-size:2.1rem; color:var(--forest); font-weight:700; margin-bottom:26px;}
+  .pd-price-row{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:26px;}
+  .pd-price-row .pd-price{font-size:2.1rem; margin-bottom:0;}
+  .pd-original-price{font-size:1.2rem; color:var(--ink-soft); text-decoration:line-through;}
+  .pd-discount-pill{
+    background:#E0333F; color:var(--white); font-weight:800; font-size:.85rem;
+    padding:4px 12px; border-radius:999px;
+  }
 
   .qty-row{display:flex; align-items:center; gap:16px; margin-bottom:24px;}
   .qty-row label{font-weight:600; color:var(--forest);}
@@ -187,6 +194,15 @@
           <div class="pd-thumbs">
             ${images.map((img, i) => `<img src="${img}" alt="${product.name} ${i+1}" data-idx="${i}" class="${i===0 ? 'active-thumb' : ''}">`).join('')}
           </div>` : '';
+    const hasDiscount = product.originalPrice && product.originalPrice > product.price;
+    const discountPct = hasDiscount ? Math.round((1 - product.price / product.originalPrice) * 100) : 0;
+    const priceHTML = hasDiscount
+      ? `<div class="pd-price-row">
+           <span class="pd-price">${formatTaka(product.price)}</span>
+           <span class="pd-original-price">${formatTaka(product.originalPrice)}</span>
+           <span class="pd-discount-pill">-${discountPct}% ছাড়</span>
+         </div>`
+      : `<div class="pd-price">${formatTaka(product.price)}</div>`;
     content.innerHTML += `
       <div class="pd-wrap">
         <div>
@@ -197,7 +213,7 @@
           <span class="pd-tag">${product.tag}</span>
           <h1>${product.name}</h1>
           <p class="pd-desc">${product.desc}</p>
-          <div class="pd-price">${formatTaka(product.price)}</div>
+          ${priceHTML}
           <div class="qty-row">
             <label>পরিমাণ</label>
             <div class="qty-control">
