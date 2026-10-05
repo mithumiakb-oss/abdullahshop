@@ -88,8 +88,12 @@
           <input type="text" id="prodName" required>
         </div>
         <div>
-          <label>দাম (টাকা)</label>
+          <label>বিক্রয় মূল্য / দাম (টাকা)</label>
           <input type="number" id="prodPrice" required>
+        </div>
+        <div>
+          <label>আগের দাম (ঐচ্ছিক — ছাড় দেখাতে চাইলে দিন)</label>
+          <input type="number" id="prodOriginalPrice" placeholder="যেমন: ৯৫০ (খালি রাখলে ছাড় দেখাবে না)">
         </div>
         <div>
           <label>ট্যাগ (যেমন: বেস্ট সেলার / নতুন / ফিচার্ড)</label>
@@ -162,7 +166,7 @@
     tbody.innerHTML = products.map(p => `
       <tr>
         <td>${p.name}</td>
-        <td>৳${p.price}</td>
+        <td>৳${p.price}${p.originalPrice ? ` <s style="color:var(--ink-soft);">৳${p.originalPrice}</s>` : ''}</td>
         <td>${p.tag || ''}</td>
         <td>${p.img}</td>
         <td class="row-actions">
@@ -186,6 +190,7 @@
     document.getElementById('prodId').value = p.id;
     document.getElementById('prodName').value = p.name;
     document.getElementById('prodPrice').value = p.price;
+    document.getElementById('prodOriginalPrice').value = p.originalPrice || '';
     document.getElementById('prodTag').value = p.tag || '';
     document.getElementById('prodImg').value = (p.images && p.images.length ? p.images : [p.img]).join(', ');
     document.getElementById('prodDesc').value = p.desc || '';
@@ -215,6 +220,7 @@
       id: document.getElementById('prodId').value.trim(),
       name: document.getElementById('prodName').value.trim(),
       price: parseInt(document.getElementById('prodPrice').value, 10),
+      originalPrice: document.getElementById('prodOriginalPrice').value ? parseInt(document.getElementById('prodOriginalPrice').value, 10) : null,
       tag: document.getElementById('prodTag').value.trim(),
       img: images[0] || '',       // first image — used as the thumbnail on the product grid
       images: images,              // full gallery — used on the product detail page
