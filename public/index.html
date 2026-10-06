@@ -222,8 +222,11 @@
     background:linear-gradient(135deg, var(--paper-2), var(--paper));
     height:210px; display:flex; align-items:center; justify-content:center; position:relative;
   }
-  .p-visual svg{width:65%; height:65%;}
-  .p-img{width:100%; height:100%; object-fit:cover; padding:0;}
+  .p-visual{
+  background:linear-gradient(135deg, var(--paper-2), var(--paper));
+  aspect-ratio:1/1; height:auto; display:flex; align-items:center; justify-content:center; position:relative;
+}
+  .p-img{width:100%; height:100%; object-fit:contain; padding:14px;}
   .p-tag{
     position:absolute; top:14px; left:14px; background:var(--gold); color:var(--forest);
     font-weight:700; font-size:.78rem; padding:5px 12px; border-radius:999px;
