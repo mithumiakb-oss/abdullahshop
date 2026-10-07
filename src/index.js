@@ -11,6 +11,15 @@ export default {
       }
     }
 
+    if (url.pathname === '/api/banner') {
+      if (request.method === 'GET') {
+        return handleBannerGet(request, env);
+      }
+      if (request.method === 'POST') {
+        return handleBannerPost(request, env);
+      }
+    }
+
     // Everything else — serve the static site (index.html, product.html, images, etc.)
     return env.ASSETS.fetch(request);
   }
@@ -75,6 +84,37 @@ async function handlePost(request, env) {
 
   await env.PRODUCTS_KV.put('products', JSON.stringify(products));
   return new Response(JSON.stringify({ success: true, products }), {
+    headers: { 'Content-Type': 'application/json' }
+  });
+}
+
+async function handleBannerGet(request, env) {
+  const raw = await env.PRODUCTS_KV.get('banner');
+  const banner = raw ? JSON.parse(raw) : { enabled: false };
+  return new Response(JSON.stringify(banner), {
+    headers: { 'Content-Type': 'application/json' }
+  });
+}
+
+async function handleBannerPost(request, env) {
+  const authKey = request.headers.get('X-Admin-Key');
+  if (!env.ADMIN_SECRET || authKey !== env.ADMIN_SECRET) {
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+      status: 401,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+
+  const body = await request.json();
+  if (!body.banner) {
+    return new Response(JSON.stringify({ error: 'Invalid request' }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+
+  await env.PRODUCTS_KV.put('banner', JSON.stringify(body.banner));
+  return new Response(JSON.stringify({ success: true, banner: body.banner }), {
     headers: { 'Content-Type': 'application/json' }
   });
 }
