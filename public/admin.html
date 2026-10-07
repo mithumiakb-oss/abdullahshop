@@ -75,6 +75,43 @@
   </div>
 
   <div class="card-box">
+    <h2 style="font-size:1.1rem; margin-bottom:16px;">হোমপেজ অফার ব্যানার</h2>
+    <form id="bannerForm">
+      <div style="margin-bottom:16px;">
+        <label style="display:flex; align-items:center; gap:10px; font-weight:600;">
+          <input type="checkbox" id="bannerEnabled" style="width:auto;"> ব্যানার চালু রাখুন (সাইটে দেখাবে)
+        </label>
+      </div>
+      <div class="form-grid">
+        <div class="full">
+          <label>ছোট ট্যাগলাইন (যেমন: ঈদ অফার)</label>
+          <input type="text" id="bannerEyebrow">
+        </div>
+        <div class="full">
+          <label>মূল শিরোনাম (যেমন: সব পণ্যে ৫০% পর্যন্ত ছাড়)</label>
+          <input type="text" id="bannerTitle">
+        </div>
+        <div class="full">
+          <label>সাবটাইটেল / বিস্তারিত</label>
+          <input type="text" id="bannerSubtitle">
+        </div>
+        <div>
+          <label>বাটনের লেখা</label>
+          <input type="text" id="bannerCtaText" placeholder="অফার দেখুন">
+        </div>
+        <div>
+          <label>বাটন ক্লিক করলে কোথায় যাবে</label>
+          <input type="text" id="bannerCtaLink" placeholder="#products">
+        </div>
+      </div>
+      <div style="margin-top:18px;">
+        <button type="submit" class="btn">ব্যানার সংরক্ষণ করুন</button>
+      </div>
+      <p class="status-msg" id="bannerStatus"></p>
+    </form>
+  </div>
+
+  <div class="card-box">
     <h2 id="formTitle" style="font-size:1.1rem; margin-bottom:16px;">নতুন পণ্য যোগ করুন</h2>
     <form id="productForm">
       <input type="hidden" id="prodIdOriginal">
@@ -138,6 +175,7 @@
     loginWrap.style.display = 'none';
     adminApp.style.display = 'block';
     loadProducts();
+    loadBanner();
   }
 
   document.getElementById('loginBtn').addEventListener('click', async ()=>{
@@ -235,6 +273,46 @@
       document.getElementById('prodIdOriginal').value = '';
       document.getElementById('formTitle').textContent = 'নতুন পণ্য যোগ করুন';
       loadProducts();
+    } else {
+      statusEl.textContent = 'সমস্যা হয়েছে, আবার চেষ্টা করুন।';
+      statusEl.className = 'status-msg error';
+    }
+    statusEl.style.display = 'block';
+    setTimeout(()=>{ statusEl.style.display = 'none'; }, 3000);
+  });
+
+  // ================= OFFER BANNER =================
+  async function loadBanner(){
+    const res = await fetch('/api/banner');
+    const banner = await res.json();
+    document.getElementById('bannerEnabled').checked = !!banner.enabled;
+    document.getElementById('bannerEyebrow').value = banner.eyebrow || '';
+    document.getElementById('bannerTitle').value = banner.title || '';
+    document.getElementById('bannerSubtitle').value = banner.subtitle || '';
+    document.getElementById('bannerCtaText').value = banner.ctaText || '';
+    document.getElementById('bannerCtaLink').value = banner.ctaLink || '';
+  }
+
+  document.getElementById('bannerForm').addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const banner = {
+      enabled: document.getElementById('bannerEnabled').checked,
+      eyebrow: document.getElementById('bannerEyebrow').value.trim(),
+      title: document.getElementById('bannerTitle').value.trim(),
+      subtitle: document.getElementById('bannerSubtitle').value.trim(),
+      ctaText: document.getElementById('bannerCtaText').value.trim(),
+      ctaLink: document.getElementById('bannerCtaLink').value.trim()
+    };
+    const res = await fetch('/api/banner', {
+      method:'POST',
+      headers:{'Content-Type':'application/json', 'X-Admin-Key': adminKey},
+      body: JSON.stringify({ banner })
+    });
+    const result = await res.json();
+    const statusEl = document.getElementById('bannerStatus');
+    if(result.success){
+      statusEl.textContent = '✓ ব্যানার সংরক্ষণ হয়েছে!';
+      statusEl.className = 'status-msg ok';
     } else {
       statusEl.textContent = 'সমস্যা হয়েছে, আবার চেষ্টা করুন।';
       statusEl.className = 'status-msg error';
