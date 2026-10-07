@@ -156,6 +156,33 @@
   .stat-row strong{font-family:'Baloo Da 2'; font-size:1.8rem; color:var(--forest); display:block;}
   .stat-row span{color:var(--ink-soft); font-size:.9rem;}
 
+  .offer-banner{
+    display:block; background:linear-gradient(120deg, var(--forest), var(--emerald));
+    border-radius:24px; padding:48px 50px; position:relative; overflow:hidden; text-decoration:none;
+    transition:transform .2s;
+  }
+  .offer-banner:hover{transform:translateY(-3px);}
+  .offer-banner::after{
+    content:""; position:absolute; width:300px; height:300px; border-radius:50%;
+    background:radial-gradient(circle, rgba(255,122,41,.3), transparent 70%);
+    top:-120px; right:-80px;
+  }
+  .offer-banner-text{position:relative; z-index:2; max-width:560px;}
+  .offer-banner-eyebrow{
+    display:inline-block; background:var(--gold); color:var(--forest); font-weight:700;
+    font-size:.82rem; padding:5px 16px; border-radius:999px; margin-bottom:14px;
+  }
+  .offer-banner-text h2{color:var(--white); font-size:2rem; font-weight:700; margin-bottom:10px;}
+  .offer-banner-text p{color:#E4ECFF; font-size:1.05rem; margin-bottom:22px;}
+  .offer-banner-btn{
+    display:inline-block; background:var(--white); color:var(--forest); font-weight:700;
+    padding:13px 28px; border-radius:999px; font-size:.95rem;
+  }
+  @media (max-width:700px){
+    .offer-banner{padding:32px 28px;}
+    .offer-banner-text h2{font-size:1.5rem;}
+  }
+
   .quick-tiles{
     display:grid; grid-template-columns:repeat(4, 1fr); gap:18px;
   }
@@ -220,12 +247,9 @@
   .p-card:hover{transform:translateY(-6px); box-shadow:0 16px 32px rgba(15,81,50,.15);}
   .p-visual{
     background:linear-gradient(135deg, var(--paper-2), var(--paper));
-    height:210px; display:flex; align-items:center; justify-content:center; position:relative;
+    aspect-ratio:1/1; height:auto; display:flex; align-items:center; justify-content:center; position:relative;
   }
-  .p-visual{
-  background:linear-gradient(135deg, var(--paper-2), var(--paper));
-  aspect-ratio:1/1; height:auto; display:flex; align-items:center; justify-content:center; position:relative;
-}
+  .p-visual svg{width:65%; height:65%;}
   .p-img{width:100%; height:100%; object-fit:contain; padding:14px;}
   .p-tag{
     position:absolute; top:14px; left:14px; background:var(--gold); color:var(--forest);
@@ -475,7 +499,19 @@
     </div>
   </div>
 
+</section>
 
+<section class="section" style="padding-top:0; padding-bottom:0;" id="offerBannerSection" hidden>
+  <div class="section-inner">
+    <a href="#products" class="offer-banner" id="offerBannerLink">
+      <div class="offer-banner-text">
+        <span class="offer-banner-eyebrow" id="offerBannerEyebrow">বিশেষ অফার</span>
+        <h2 id="offerBannerTitle">টাইটেল</h2>
+        <p id="offerBannerSubtitle">সাবটাইটেল</p>
+        <span class="offer-banner-btn" id="offerBannerBtnText">অফার দেখুন</span>
+      </div>
+    </a>
+  </div>
 </section>
 
 <section class="section" style="padding-top:0;">
@@ -772,6 +808,22 @@
   }
   loadProducts();
 
+  // ================= OFFER BANNER (loaded from /api/banner) =================
+  async function loadBanner(){
+    try{
+      const res = await fetch('/api/banner');
+      const banner = await res.json();
+      if(!banner || !banner.enabled) return; // stays hidden
+      document.getElementById('offerBannerEyebrow').textContent = banner.eyebrow || 'বিশেষ অফার';
+      document.getElementById('offerBannerTitle').textContent = banner.title || '';
+      document.getElementById('offerBannerSubtitle').textContent = banner.subtitle || '';
+      document.getElementById('offerBannerBtnText').textContent = banner.ctaText || 'অফার দেখুন';
+      document.getElementById('offerBannerLink').href = banner.ctaLink || '#products';
+      document.getElementById('offerBannerSection').hidden = false;
+    }catch(err){ /* stays hidden on failure */ }
+  }
+  loadBanner();
+
   // Event delegation — works for cards added dynamically after fetch
   productGrid.addEventListener('click', (e)=>{
     const btn = e.target.closest('.add-cart-btn');
@@ -852,7 +904,7 @@
   renderCart();
 </script>
 
-      <!-- Cloudflare Web Analytics -->
+<!-- Cloudflare Web Analytics -->
     <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js'
     data-cf-beacon='{"token": "1e4a35840dc144f3a8ad940528e3f040"}'></script>
     <!-- End Cloudflare Web Analytics -->
