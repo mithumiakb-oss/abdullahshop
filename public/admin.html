@@ -84,6 +84,11 @@
       </div>
       <div class="form-grid">
         <div class="full">
+          <label>ব্যানারের ছবি — নিজের ডিজাইন করা (GitHub এর public ফোল্ডারে আপলোড করা ফাইলের নাম। একাধিক হলে কমা দিয়ে আলাদা করুন, যেমন: banner1.jpg, banner2.jpg)</label>
+          <input type="text" id="bannerImages" placeholder="banner1.jpg">
+          <p style="font-size:.82rem; color:var(--ink-soft); margin-top:6px;">ছবি দিলে শুধু ছবিটাই ব্যানার হিসেবে দেখাবে (একাধিক হলে নিজে নিজে ঘুরবে)। ছবি না দিলে নিচের লেখা দিয়ে ব্যানার হবে। সাইজ: ১৬০০ x ৬০০ পিক্সেল, সব ছবির সাইজ একই রাখুন।</p>
+        </div>
+        <div class="full">
           <label>ছোট ট্যাগলাইন (যেমন: ঈদ অফার)</label>
           <input type="text" id="bannerEyebrow">
         </div>
@@ -135,6 +140,11 @@
         <div>
           <label>ট্যাগ (যেমন: বেস্ট সেলার / নতুন / ফিচার্ড)</label>
           <input type="text" id="prodTag">
+        </div>
+        <div>
+          <label>ক্যাটাগরি (যেমন: হেডফোন) — হোমপেজে ক্যাটাগরি বাটন হিসেবে আসবে</label>
+          <input type="text" id="prodCategory" list="categoryList" placeholder="খালি রাখলে ক্যাটাগরিতে আসবে না">
+          <datalist id="categoryList"></datalist>
         </div>
         <div class="full">
           <label>ছবির ফাইলের নাম (একাধিক দিলে কমা দিয়ে আলাদা করুন, যেমন: water-dispenser.jpg, water-dispenser-2.jpg)</label>
@@ -200,10 +210,13 @@
   async function loadProducts(){
     const res = await fetch('/api/products');
     const products = await res.json();
+    // ক্যাটাগরির সাজেশন লিস্ট (আগে ব্যবহার করা ক্যাটাগরি)
+    const cats = [...new Set(products.map(p => (p.category || '').trim()).filter(Boolean))];
+    document.getElementById('categoryList').innerHTML = cats.map(c => `<option value="${c}">`).join('');
     const tbody = document.getElementById('productsTableBody');
     tbody.innerHTML = products.map(p => `
       <tr>
-        <td>${p.name}</td>
+        <td>${p.name}${p.category ? ` <small style="color:var(--ink-soft);">(${p.category})</small>` : ''}</td>
         <td>৳${p.price}${p.originalPrice ? ` <s style="color:var(--ink-soft);">৳${p.originalPrice}</s>` : ''}</td>
         <td>${p.tag || ''}</td>
         <td>${p.img}</td>
@@ -230,6 +243,7 @@
     document.getElementById('prodPrice').value = p.price;
     document.getElementById('prodOriginalPrice').value = p.originalPrice || '';
     document.getElementById('prodTag').value = p.tag || '';
+    document.getElementById('prodCategory').value = p.category || '';
     document.getElementById('prodImg').value = (p.images && p.images.length ? p.images : [p.img]).join(', ');
     document.getElementById('prodDesc').value = p.desc || '';
     window.scrollTo({top:0, behavior:'smooth'});
@@ -260,6 +274,7 @@
       price: parseInt(document.getElementById('prodPrice').value, 10),
       originalPrice: document.getElementById('prodOriginalPrice').value ? parseInt(document.getElementById('prodOriginalPrice').value, 10) : null,
       tag: document.getElementById('prodTag').value.trim(),
+      category: document.getElementById('prodCategory').value.trim(),
       img: images[0] || '',       // first image — used as the thumbnail on the product grid
       images: images,              // full gallery — used on the product detail page
       desc: document.getElementById('prodDesc').value.trim()
@@ -286,6 +301,7 @@
     const res = await fetch('/api/banner');
     const banner = await res.json();
     document.getElementById('bannerEnabled').checked = !!banner.enabled;
+    document.getElementById('bannerImages').value = Array.isArray(banner.images) ? banner.images.join(', ') : '';
     document.getElementById('bannerEyebrow').value = banner.eyebrow || '';
     document.getElementById('bannerTitle').value = banner.title || '';
     document.getElementById('bannerSubtitle').value = banner.subtitle || '';
@@ -297,6 +313,7 @@
     e.preventDefault();
     const banner = {
       enabled: document.getElementById('bannerEnabled').checked,
+      images: document.getElementById('bannerImages').value.split(',').map(s => s.trim()).filter(Boolean),
       eyebrow: document.getElementById('bannerEyebrow').value.trim(),
       title: document.getElementById('bannerTitle').value.trim(),
       subtitle: document.getElementById('bannerSubtitle').value.trim(),
