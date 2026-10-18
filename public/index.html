@@ -156,6 +156,17 @@
   .stat-row strong{font-family:'Baloo Da 2'; font-size:1.8rem; color:var(--forest); display:block;}
   .stat-row span{color:var(--ink-soft); font-size:.9rem;}
 
+  [hidden]{display:none !important;}
+  .banner-section{padding:24px 24px 0;}
+  #categorySection{padding:28px 24px 0;}
+  #categorySection .cat-tabs{margin-bottom:0;}
+  .banner-slider{position:relative; border-radius:20px; overflow:hidden; background:var(--paper-2);}
+  .banner-slider-link{display:block;}
+  .banner-slide{display:none; width:100%; height:auto;}
+  .banner-slide.active{display:block;}
+  .banner-dots{position:absolute; left:0; right:0; bottom:12px; display:flex; justify-content:center; gap:8px;}
+  .banner-dots button{width:10px; height:10px; border-radius:50%; border:none; background:rgba(255,255,255,.7); cursor:pointer; padding:0; transition:.2s;}
+  .banner-dots button.active{background:var(--gold); width:26px; border-radius:999px;}
   .offer-banner{
     display:block; background:linear-gradient(120deg, var(--forest), var(--emerald));
     border-radius:24px; padding:48px 50px; position:relative; overflow:hidden; text-decoration:none;
@@ -465,45 +476,24 @@
     <p class="cart-empty">কার্ট এখনো খালি</p>
   </div>
   <div class="cart-footer">
-    <div class="cart-total-row"><span>মোট</span><span id="cartTotal">৳০</span></div>
+    <div class="cart-total-row"><span>পণ্যের মোট</span><span id="cartTotal">৳০</span></div>
+    <p style="font-size:.82rem; color:var(--ink-soft); margin:-6px 0 14px;">ডেলিভারি চার্জ অর্ডার ফর্মে যোগ হবে (ঢাকার ভেতরে ৳৬০, বাইরে ৳১২০)।</p>
     <button class="cart-checkout-btn" id="cartCheckoutBtn">অর্ডার করতে যান</button>
   </div>
 </div>
 
-<section class="hero" id="main-content">
-  <div class="bagline"></div>
-  <div class="hero-inner">
-    <div>
-      <span class="eyebrow">বিশ্বস্ত অনলাইন শপ • সারা বাংলাদেশে ডেলিভারি</span>
-      <h1>আপনার প্রয়োজনের সবকিছু, <span class="accent">এক জায়গায়</span></h1>
-      <div class="hero-btns">
-        <a href="#products" class="btn-primary">পণ্য দেখুন</a>
-        <a href="#order" class="btn-secondary">অর্ডার করুন</a>
-      </div>
-    </div>
-    <div class="hero-visual">
-      <svg class="bag-badge" viewBox="0 0 300 300" role="img" aria-labelledby="heroBagTitle">
-        <title id="heroBagTitle">AbdullahShop ব্যাগ লোগো</title>
-        <defs>
-          <linearGradient id="heroBag" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#5B93FF"/>
-            <stop offset="100%" stop-color="#0F1B3D"/>
-          </linearGradient>
-        </defs>
-        <circle cx="150" cy="150" r="140" fill="#F1EAD6"/>
-        <path d="M105 95 Q105 55 150 55 Q195 55 195 95" fill="none" stroke="#2F6FED" stroke-width="10" stroke-linecap="round"/>
-        <path d="M70 100 L230 100 L215 235 L85 235 Z" fill="url(#heroBag)"/>
-        <path d="M70 100 L150 100 L138 235 L85 235 Z" fill="#5B93FF" opacity="0.45"/>
-        <text x="150" y="200" font-family="Baloo Da 2, sans-serif" font-size="110" font-weight="700" fill="#F3F6FD" text-anchor="middle">A</text>
-      </svg>
-    </div>
-  </div>
+<div id="main-content"></div>
 
-</section>
-
-<section class="section" style="padding-top:0; padding-bottom:0;" id="offerBannerSection" hidden>
+<!-- ব্যানার: অ্যাডমিন প্যানেল থেকে ছবি/লেখা বসানো ও চালু-বন্ধ করা যায় -->
+<section class="section banner-section" id="offerBannerSection" hidden>
   <div class="section-inner">
-    <a href="#products" class="offer-banner" id="offerBannerLink">
+    <div class="banner-slider" id="bannerSlider" hidden>
+      <a href="#products" id="bannerSliderLink" class="banner-slider-link">
+        <div id="bannerSlides"></div>
+      </a>
+      <div class="banner-dots" id="bannerDots"></div>
+    </div>
+    <a href="#products" class="offer-banner" id="offerBannerLink" hidden>
       <div class="offer-banner-text">
         <span class="offer-banner-eyebrow" id="offerBannerEyebrow">বিশেষ অফার</span>
         <h2 id="offerBannerTitle">টাইটেল</h2>
@@ -514,30 +504,14 @@
   </div>
 </section>
 
-<section class="section" style="padding-top:0;">
+<!-- ক্যাটাগরি: পণ্যে ক্যাটাগরি দিলে নিজে থেকে এখানে দেখাবে -->
+<section class="section" id="categorySection" hidden>
   <div class="section-inner">
-    <div class="quick-tiles">
-      <a href="#products" class="quick-tile">
-        <span class="qt-icon" style="background:#FFE9D9; color:#E85D0A;">🏆</span>
-        <div><strong>বেস্ট সেলার</strong><span>এখনই দেখুন</span></div>
-      </a>
-      <a href="#products" class="quick-tile">
-        <span class="qt-icon" style="background:#DCE7FF; color:#2F6FED;">✨</span>
-        <div><strong>নতুন এসেছে</strong><span>এখনই দেখুন</span></div>
-      </a>
-      <a href="#products" class="quick-tile">
-        <span class="qt-icon" style="background:#FFE0EC; color:#D6336C;">⭐</span>
-        <div><strong>ফিচার্ড পণ্য</strong><span>এখনই দেখুন</span></div>
-      </a>
-      <a href="#order" class="quick-tile">
-        <span class="qt-icon" style="background:#E1F7EA; color:#1B9C5B;">🚚</span>
-        <div><strong>দ্রুত অর্ডার</strong><span>এখনই দেখুন</span></div>
-      </a>
-    </div>
+    <div class="cat-tabs" id="categoryTabs"></div>
   </div>
 </section>
 
-<section class="section" id="products">
+<section class="section" id="products" style="padding-top:48px;">
   <div class="section-inner">
     <div class="section-head">
       <span class="tag">আমাদের পণ্য</span>
@@ -600,6 +574,14 @@
             <span class="empty-note">এখনো কোনো পণ্য কার্টে যোগ করা হয়নি — উপরে "পণ্য" সেকশন থেকে কার্টে যোগ করুন।</span>
           </div>
           <input type="hidden" name="product" id="productHiddenInput">
+        </div>
+        <div class="form-group">
+          <label for="deliveryArea">ডেলিভারি এলাকা</label>
+          <select id="deliveryArea" name="delivery_area" required>
+            <option value="">-- এলাকা বেছে নিন --</option>
+            <option value="inside">ঢাকার ভেতরে — ৳৬০</option>
+            <option value="outside">ঢাকার বাইরে — ৳১২০</option>
+          </select>
         </div>
         <div class="form-group">
           <label for="custAddress">ঠিকানা</label>
@@ -687,11 +669,8 @@
   const siteSearchInput = document.getElementById('siteSearchInput');
   if(siteSearchInput){
     siteSearchInput.addEventListener('input', ()=>{
-      const q = siteSearchInput.value.trim().toLowerCase();
-      document.querySelectorAll('.p-card').forEach(card=>{
-        const name = card.querySelector('h3').textContent.toLowerCase();
-        card.style.display = name.includes(q) ? '' : 'none';
-      });
+      searchQuery = siteSearchInput.value.trim().toLowerCase();
+      renderProductGrid();
     });
     siteSearchInput.addEventListener('keydown', (e)=>{
       if(e.key === 'Enter'){
@@ -736,6 +715,11 @@
   const cartTotalEl = document.getElementById('cartTotal');
   const selectedProductsBox = document.getElementById('selectedProductsBox');
   const productHiddenInput = document.getElementById('productHiddenInput');
+
+  // ডেলিভারি চার্জ — এখানে বদলানো যাবে
+  const DELIVERY_CHARGES = { inside: 60, outside: 120 };
+  const DELIVERY_LABELS = { inside: 'ঢাকার ভেতরে', outside: 'ঢাকার বাইরে' };
+  const deliveryAreaSelect = document.getElementById('deliveryArea');
 
   function formatTaka(n){
     return '৳' + n.toLocaleString('en-US');
@@ -793,6 +777,42 @@
       </div>`;
   }
 
+  let allProducts = [];
+  let activeCategory = 'all';
+  let searchQuery = '';
+
+  function renderProductGrid(){
+    const list = allProducts.filter(p =>
+      (activeCategory === 'all' || (p.category || '').trim() === activeCategory) &&
+      (!searchQuery || (p.name || '').toLowerCase().includes(searchQuery))
+    );
+    productGrid.innerHTML = list.length
+      ? list.map(productCardHTML).join('')
+      : '<p style="color:var(--ink-soft);">কোনো পণ্য পাওয়া যায়নি।</p>';
+  }
+
+  function renderCategoryTabs(){
+    const cats = [...new Set(allProducts.map(p => (p.category || '').trim()).filter(Boolean))];
+    const section = document.getElementById('categorySection');
+    const tabs = document.getElementById('categoryTabs');
+    if(cats.length === 0){ section.hidden = true; return; }
+    tabs.innerHTML = '';
+    ['all', ...cats].forEach(cat => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = cat === 'all' ? 'সব পণ্য' : cat;
+      if(cat === activeCategory) b.classList.add('active');
+      b.addEventListener('click', ()=>{
+        activeCategory = cat;
+        tabs.querySelectorAll('button').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        renderProductGrid();
+      });
+      tabs.appendChild(b);
+    });
+    section.hidden = false;
+  }
+
   async function loadProducts(){
     try{
       const res = await fetch('/api/products');
@@ -801,7 +821,9 @@
         productGrid.innerHTML = '<p style="color:var(--ink-soft);">এখনো কোনো পণ্য যোগ করা হয়নি।</p>';
         return;
       }
-      productGrid.innerHTML = products.map(productCardHTML).join('');
+      allProducts = products;
+      renderCategoryTabs();
+      renderProductGrid();
     }catch(err){
       productGrid.innerHTML = '<p style="color:var(--ink-soft);">পণ্য লোড করতে সমস্যা হয়েছে।</p>';
     }
@@ -809,16 +831,67 @@
   loadProducts();
 
   // ================= OFFER BANNER (loaded from /api/banner) =================
+  let bannerTimer = null;
+
+  function startBannerSlider(){
+    const slides = [...document.querySelectorAll('.banner-slide')];
+    const dotsWrap = document.getElementById('bannerDots');
+    dotsWrap.innerHTML = '';
+    let cur = 0;
+    function show(i){
+      cur = i;
+      slides.forEach((s,k) => s.classList.toggle('active', k === i));
+      dots.forEach((d,k) => d.classList.toggle('active', k === i));
+    }
+    function restart(){
+      clearInterval(bannerTimer);
+      bannerTimer = setInterval(()=> show((cur + 1) % slides.length), 4500);
+    }
+    const dots = slides.map((_, i) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.setAttribute('aria-label', 'ব্যানার ' + (i + 1));
+      b.addEventListener('click', ()=>{ show(i); restart(); });
+      dotsWrap.appendChild(b);
+      return b;
+    });
+    show(0);
+    restart();
+  }
+
   async function loadBanner(){
     try{
       const res = await fetch('/api/banner');
       const banner = await res.json();
       if(!banner || !banner.enabled) return; // stays hidden
-      document.getElementById('offerBannerEyebrow').textContent = banner.eyebrow || 'বিশেষ অফার';
-      document.getElementById('offerBannerTitle').textContent = banner.title || '';
-      document.getElementById('offerBannerSubtitle').textContent = banner.subtitle || '';
-      document.getElementById('offerBannerBtnText').textContent = banner.ctaText || 'অফার দেখুন';
-      document.getElementById('offerBannerLink').href = banner.ctaLink || '#products';
+      const link = banner.ctaLink || '#products';
+      const images = Array.isArray(banner.images) ? banner.images.filter(Boolean) : [];
+
+      if(images.length){
+        // নিজের ডিজাইন করা ছবি — শুধু ছবিই দেখাবে, কোনো অংশ কাটা পড়বে না
+        const slides = document.getElementById('bannerSlides');
+        slides.innerHTML = '';
+        images.forEach((src, i) => {
+          const img = document.createElement('img');
+          img.src = src;
+          img.alt = banner.title || 'অফার ব্যানার';
+          img.className = 'banner-slide' + (i === 0 ? ' active' : '');
+          slides.appendChild(img);
+        });
+        document.getElementById('bannerSliderLink').href = link;
+        document.getElementById('bannerSlider').hidden = false;
+        if(images.length > 1) startBannerSlider();
+      } else if(banner.title){
+        // ছবি না থাকলে লেখার ব্যানার
+        document.getElementById('offerBannerEyebrow').textContent = banner.eyebrow || 'বিশেষ অফার';
+        document.getElementById('offerBannerTitle').textContent = banner.title || '';
+        document.getElementById('offerBannerSubtitle').textContent = banner.subtitle || '';
+        document.getElementById('offerBannerBtnText').textContent = banner.ctaText || 'অফার দেখুন';
+        document.getElementById('offerBannerLink').href = link;
+        document.getElementById('offerBannerLink').hidden = false;
+      } else {
+        return;
+      }
       document.getElementById('offerBannerSection').hidden = false;
     }catch(err){ /* stays hidden on failure */ }
   }
@@ -884,13 +957,27 @@
       selectedProductsBox.innerHTML = '<span class="empty-note">এখনো কোনো পণ্য কার্টে যোগ করা হয়নি — উপরে "পণ্য" সেকশন থেকে কার্টে যোগ করুন।</span>';
       productHiddenInput.value = '';
     } else {
+      const areaKey = deliveryAreaSelect.value;
+      const deliveryCharge = areaKey ? DELIVERY_CHARGES[areaKey] : 0;
+      const grandTotal = total + deliveryCharge;
+
       let lines = cart.map(i => `<div class="selected-line"><span>${i.name} × ${i.qty}</span><span>${formatTaka(i.price*i.qty)}</span></div>`).join('');
-      lines += `<div class="selected-total"><span>মোট</span><span>${formatTaka(total)}</span></div>`;
+      lines += `<div class="selected-line"><span>পণ্যের মোট</span><span>${formatTaka(total)}</span></div>`;
+      lines += areaKey
+        ? `<div class="selected-line"><span>ডেলিভারি চার্জ (${DELIVERY_LABELS[areaKey]})</span><span>${formatTaka(deliveryCharge)}</span></div>`
+        : `<div class="selected-line"><span>ডেলিভারি চার্জ</span><span style="color:var(--ink-soft);">এলাকা বেছে নিন</span></div>`;
+      lines += `<div class="selected-total"><span>সর্বমোট</span><span>${formatTaka(grandTotal)}</span></div>`;
       selectedProductsBox.innerHTML = lines;
 
-      productHiddenInput.value = cart.map(i => `${i.name} x${i.qty} (${formatTaka(i.price*i.qty)})`).join(', ') + ` | সর্বমোট: ${formatTaka(total)}`;
+      productHiddenInput.value = cart.map(i => `${i.name} x${i.qty} (${formatTaka(i.price*i.qty)})`).join(', ')
+        + ` | পণ্যের মোট: ${formatTaka(total)}`
+        + (areaKey ? ` | ডেলিভারি (${DELIVERY_LABELS[areaKey]}): ${formatTaka(deliveryCharge)}` : '')
+        + ` | সর্বমোট: ${formatTaka(grandTotal)}`;
     }
   }
+
+  // Re-calculate totals whenever the delivery area changes
+  deliveryAreaSelect.addEventListener('change', renderCart);
 
   // expose for inline onclick handlers
   window.cartChangeQty = changeQty;
@@ -903,10 +990,10 @@
 
   renderCart();
 </script>
-
-<!-- Cloudflare Web Analytics -->
+  <!-- Cloudflare Web Analytics -->
     <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js'
     data-cf-beacon='{"token": "1e4a35840dc144f3a8ad940528e3f040"}'></script>
     <!-- End Cloudflare Web Analytics -->
+
 </body>
 </html>
