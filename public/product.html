@@ -108,6 +108,18 @@
     .pd-wrap{grid-template-columns:1fr;}
     .pd-image{min-height:260px;}
   }
+  @media (max-width:600px){
+    .nav-wrap{padding:10px 14px;}
+    main{padding:16px 14px 60px;}
+    .back-link{margin-bottom:14px;}
+    .pd-wrap{gap:18px;}
+    .pd-image{min-height:0; padding:10px; border-radius:16px;}
+    .pd-info h1{font-size:1.4rem;}
+    .pd-info .pd-desc{font-size:.98rem; margin-bottom:16px;}
+    .pd-price, .pd-price-row .pd-price{font-size:1.7rem;}
+    .pd-btns{gap:10px;}
+    .btn-add-cart, .btn-view-cart{flex:1 1 100%; text-align:center;}
+  }
 </style>
 </head>
 <body>
@@ -274,8 +286,7 @@
   loadProduct();
   updateCartBadge();
 </script>
-
- <!-- Cloudflare Web Analytics -->
+<!-- Cloudflare Web Analytics -->
     <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js'
     data-cf-beacon='{"token": "1e4a35840dc144f3a8ad940528e3f040"}'></script>
     <!-- End Cloudflare Web Analytics -->
