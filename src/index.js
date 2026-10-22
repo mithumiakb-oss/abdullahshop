@@ -20,6 +20,15 @@ export default {
       }
     }
 
+    if (url.pathname === '/api/categories') {
+      if (request.method === 'GET') {
+        return handleCategoriesGet(request, env);
+      }
+      if (request.method === 'POST') {
+        return handleCategoriesPost(request, env);
+      }
+    }
+
     // Everything else — serve the static site (index.html, product.html, images, etc.)
     return env.ASSETS.fetch(request);
   }
@@ -115,6 +124,51 @@ async function handleBannerPost(request, env) {
 
   await env.PRODUCTS_KV.put('banner', JSON.stringify(body.banner));
   return new Response(JSON.stringify({ success: true, banner: body.banner }), {
+    headers: { 'Content-Type': 'application/json' }
+  });
+}
+
+async function handleCategoriesGet(request, env) {
+  const raw = await env.PRODUCTS_KV.get('categories');
+  const categories = raw ? JSON.parse(raw) : [];
+  return new Response(JSON.stringify(categories), {
+    headers: { 'Content-Type': 'application/json' }
+  });
+}
+
+async function handleCategoriesPost(request, env) {
+  const authKey = request.headers.get('X-Admin-Key');
+  if (!env.ADMIN_SECRET || authKey !== env.ADMIN_SECRET) {
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+      status: 401,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+
+  const body = await request.json();
+  const raw = await env.PRODUCTS_KV.get('categories');
+  let categories = raw ? JSON.parse(raw) : [];
+
+  if (body.action === 'delete' && body.name) {
+    categories = categories.filter(c => c.name !== body.name);
+  } else if (body.action === 'save' && body.category && body.category.name) {
+    const name = String(body.category.name).trim();
+    const image = String(body.category.image || '').trim();
+    const idx = categories.findIndex(c => c.name === name);
+    if (idx >= 0) {
+      categories[idx] = { name, image };
+    } else {
+      categories.push({ name, image });
+    }
+  } else {
+    return new Response(JSON.stringify({ error: 'Invalid request' }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+
+  await env.PRODUCTS_KV.put('categories', JSON.stringify(categories));
+  return new Response(JSON.stringify({ success: true, categories }), {
     headers: { 'Content-Type': 'application/json' }
   });
 }
