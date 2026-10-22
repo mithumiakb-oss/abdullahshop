@@ -39,7 +39,7 @@
   .form-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
   .form-grid .full{grid-column:1/-1;}
   label{display:block; font-weight:600; font-size:.88rem; color:var(--forest); margin-bottom:6px;}
-  input, textarea{
+  input, textarea, select{
     width:100%; padding:10px 12px; border:2px solid var(--paper-2); border-radius:10px;
     font-family:'Hind Siliguri'; font-size:.92rem; color:var(--ink);
   }
@@ -117,6 +117,33 @@
   </div>
 
   <div class="card-box">
+    <h2 style="font-size:1.1rem; margin-bottom:6px;">ক্যাটাগরি</h2>
+    <p style="color:var(--ink-soft); font-size:.88rem; margin-bottom:16px;">এখানে ক্যাটাগরি বানান, তারপর নিচে পণ্য যোগ করার সময় ক্যাটাগরি বেছে নিন। ছবি দিলে হোমপেজে গোল ছবিসহ দেখাবে (ছবি না দিলে শুধু নামের বাটন)।</p>
+    <p class="status-msg error" id="catWarn" style="display:none;">ক্যাটাগরির সার্ভার অংশ এখনো আপডেট হয়নি। GitHub এ <b>src/index.js</b> নতুন ভার্সন দিয়ে রিপ্লেস করে ডিপ্লয় হওয়া পর্যন্ত অপেক্ষা করুন।</p>
+    <form id="categoryForm">
+      <div class="form-grid">
+        <div>
+          <label>ক্যাটাগরির নাম</label>
+          <input type="text" id="catName" required placeholder="যেমন: হেডফোন">
+        </div>
+        <div>
+          <label>ছবির ফাইলের নাম (ঐচ্ছিক, স্কয়ার ৪০০x৪০০ পিক্সেল)</label>
+          <input type="text" id="catImage" placeholder="cat-headphone.jpg">
+        </div>
+      </div>
+      <div style="margin-top:16px; display:flex; gap:12px;">
+        <button type="submit" class="btn">ক্যাটাগরি সংরক্ষণ করুন</button>
+        <button type="button" class="btn btn-secondary" id="catClearBtn">খালি করুন</button>
+      </div>
+      <p class="status-msg" id="catStatus"></p>
+    </form>
+    <table>
+      <thead><tr><th>নাম</th><th>ছবি</th><th>পণ্য</th><th>অ্যাকশন</th></tr></thead>
+      <tbody id="catTableBody"></tbody>
+    </table>
+  </div>
+
+  <div class="card-box">
     <h2 id="formTitle" style="font-size:1.1rem; margin-bottom:16px;">নতুন পণ্য যোগ করুন</h2>
     <form id="productForm">
       <input type="hidden" id="prodIdOriginal">
@@ -142,9 +169,8 @@
           <input type="text" id="prodTag">
         </div>
         <div>
-          <label>ক্যাটাগরি (যেমন: হেডফোন) — হোমপেজে ক্যাটাগরি বাটন হিসেবে আসবে</label>
-          <input type="text" id="prodCategory" list="categoryList" placeholder="খালি রাখলে ক্যাটাগরিতে আসবে না">
-          <datalist id="categoryList"></datalist>
+          <label>ক্যাটাগরি (উপরের ক্যাটাগরি কার্ড থেকে বানানো)</label>
+          <select id="prodCategory"><option value="">— ক্যাটাগরি নেই —</option></select>
         </div>
         <div class="full">
           <label>ছবির ফাইলের নাম (একাধিক দিলে কমা দিয়ে আলাদা করুন, যেমন: water-dispenser.jpg, water-dispenser-2.jpg)</label>
@@ -185,6 +211,7 @@
     loginWrap.style.display = 'none';
     adminApp.style.display = 'block';
     loadProducts();
+    loadCategories();
     loadBanner();
   }
 
@@ -207,25 +234,34 @@
 
   if(adminKey){ showApp(); }
 
+  // নিরাপদে টেক্সট দেখানোর জন্য
+  function esc(s){
+    return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  let productsList = [];
+  let categories = [];       // [{name, image}]
+  let categoriesApiOk = true;
+
   async function loadProducts(){
     const res = await fetch('/api/products');
-    const products = await res.json();
-    // ক্যাটাগরির সাজেশন লিস্ট (আগে ব্যবহার করা ক্যাটাগরি)
-    const cats = [...new Set(products.map(p => (p.category || '').trim()).filter(Boolean))];
-    document.getElementById('categoryList').innerHTML = cats.map(c => `<option value="${c}">`).join('');
+    productsList = await res.json();
     const tbody = document.getElementById('productsTableBody');
-    tbody.innerHTML = products.map(p => `
+    tbody.innerHTML = productsList.map((p, i) => `
       <tr>
-        <td>${p.name}${p.category ? ` <small style="color:var(--ink-soft);">(${p.category})</small>` : ''}</td>
-        <td>৳${p.price}${p.originalPrice ? ` <s style="color:var(--ink-soft);">৳${p.originalPrice}</s>` : ''}</td>
-        <td>${p.tag || ''}</td>
-        <td>${p.img}</td>
+        <td>${esc(p.name)}${p.category ? ` <small style="color:var(--ink-soft);">(${esc(p.category)})</small>` : ''}</td>
+        <td>৳${esc(p.price)}${p.originalPrice ? ` <s style="color:var(--ink-soft);">৳${esc(p.originalPrice)}</s>` : ''}</td>
+        <td>${esc(p.tag || '')}</td>
+        <td>${esc((p.images && p.images.length ? p.images : [p.img]).join(', '))}</td>
         <td class="row-actions">
-          <button class="edit-btn" onclick='editProduct(${JSON.stringify(p).replace(/'/g, "&#39;")})'>এডিট</button>
-          <button class="delete-btn" data-id="${p.id}">ডিলিট</button>
+          <button class="edit-btn" data-idx="${i}">এডিট</button>
+          <button class="delete-btn" data-id="${esc(p.id)}">ডিলিট</button>
         </td>
       </tr>`).join('') || '<tr><td colspan="5" style="color:var(--ink-soft);">কোনো পণ্য নেই।</td></tr>';
 
+    tbody.querySelectorAll('.edit-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=> editProduct(productsList[parseInt(btn.dataset.idx, 10)]));
+    });
     tbody.querySelectorAll('.delete-btn').forEach(btn=>{
       btn.addEventListener('click', async ()=>{
         if(!confirm('এই পণ্যটি ডিলিট করতে চান?')) return;
@@ -233,6 +269,7 @@
         loadProducts();
       });
     });
+    refreshCategoryUI();
   }
 
   function editProduct(p){
@@ -243,12 +280,141 @@
     document.getElementById('prodPrice').value = p.price;
     document.getElementById('prodOriginalPrice').value = p.originalPrice || '';
     document.getElementById('prodTag').value = p.tag || '';
-    document.getElementById('prodCategory').value = p.category || '';
+    fillCategorySelect(p.category || '');
     document.getElementById('prodImg').value = (p.images && p.images.length ? p.images : [p.img]).join(', ');
     document.getElementById('prodDesc').value = p.desc || '';
     window.scrollTo({top:0, behavior:'smooth'});
   }
-  window.editProduct = editProduct;
+
+  // ================= ক্যাটাগরি =================
+  // ক্যাটাগরির তালিকা + আগের পণ্যে লেখা ক্যাটাগরি (যাতে কিছু হারিয়ে না যায়)
+  function allCategoryNames(){
+    const names = categories.map(c => c.name);
+    productsList.forEach(p => {
+      const c = (p.category || '').trim();
+      if(c && !names.includes(c)) names.push(c);
+    });
+    return names;
+  }
+
+  function fillCategorySelect(selected){
+    const sel = document.getElementById('prodCategory');
+    const current = selected !== undefined ? selected : sel.value;
+    sel.innerHTML = '<option value="">— ক্যাটাগরি নেই —</option>' +
+      allCategoryNames().map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join('');
+    sel.value = current;
+  }
+
+  function renderCategoryTable(){
+    const tbody = document.getElementById('catTableBody');
+    const rows = allCategoryNames().map(name => {
+      const c = categories.find(x => x.name === name);
+      const count = productsList.filter(p => (p.category || '').trim() === name).length;
+      return { name, image: c ? c.image : '', saved: !!c, count };
+    });
+    tbody.innerHTML = rows.map((r, i) => `
+      <tr>
+        <td>${esc(r.name)}${r.saved ? '' : ' <small style="color:#C0392B;">(শুধু পণ্যে আছে — সংরক্ষণ করুন)</small>'}</td>
+        <td>${esc(r.image || '—')}</td>
+        <td>${r.count}টা</td>
+        <td class="row-actions">
+          <button class="edit-btn" data-i="${i}">${r.saved ? 'এডিট' : 'যোগ করুন'}</button>
+          <button class="delete-btn" data-i="${i}">ডিলিট</button>
+        </td>
+      </tr>`).join('') || '<tr><td colspan="4" style="color:var(--ink-soft);">এখনো কোনো ক্যাটাগরি নেই।</td></tr>';
+
+    tbody.querySelectorAll('.edit-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const r = rows[parseInt(btn.dataset.i, 10)];
+        document.getElementById('catName').value = r.name;
+        document.getElementById('catImage').value = r.image || '';
+        document.getElementById('catName').focus();
+      });
+    });
+    tbody.querySelectorAll('.delete-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=> deleteCategory(rows[parseInt(btn.dataset.i, 10)]));
+    });
+  }
+
+  function refreshCategoryUI(){
+    fillCategorySelect();
+    renderCategoryTable();
+    document.getElementById('catWarn').style.display = categoriesApiOk ? 'none' : 'block';
+  }
+
+  async function loadCategories(){
+    try{
+      const res = await fetch('/api/categories');
+      const data = await res.json();
+      categories = Array.isArray(data) ? data : [];
+      categoriesApiOk = Array.isArray(data);
+    }catch(err){
+      categories = [];
+      categoriesApiOk = false;
+    }
+    refreshCategoryUI();
+  }
+
+  async function postJSON(url, payload){
+    try{
+      const res = await fetch(url, {
+        method:'POST',
+        headers:{'Content-Type':'application/json', 'X-Admin-Key': adminKey},
+        body: JSON.stringify(payload)
+      });
+      return await res.json();
+    }catch(err){
+      return { error: 'request failed' };
+    }
+  }
+
+  function showCatStatus(msg, ok){
+    const el = document.getElementById('catStatus');
+    el.textContent = msg;
+    el.className = 'status-msg ' + (ok ? 'ok' : 'error');
+    el.style.display = 'block';
+    setTimeout(()=>{ el.style.display = 'none'; }, 3500);
+  }
+
+  document.getElementById('categoryForm').addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const name = document.getElementById('catName').value.trim();
+    const image = document.getElementById('catImage').value.trim();
+    if(!name) return;
+    const result = await postJSON('/api/categories', { action:'save', category:{ name, image } });
+    if(result.success){
+      categories = result.categories;
+      categoriesApiOk = true;
+      refreshCategoryUI();
+      document.getElementById('categoryForm').reset();
+      showCatStatus('✓ ক্যাটাগরি সংরক্ষণ হয়েছে!', true);
+    } else {
+      categoriesApiOk = false;
+      refreshCategoryUI();
+      showCatStatus('সংরক্ষণ হয়নি — সার্ভার আপডেট হয়েছে কিনা দেখুন।', false);
+    }
+  });
+
+  document.getElementById('catClearBtn').addEventListener('click', ()=>{
+    document.getElementById('categoryForm').reset();
+  });
+
+  async function deleteCategory(r){
+    const affected = productsList.filter(p => (p.category || '').trim() === r.name);
+    const msg = `"${r.name}" ক্যাটাগরি ডিলিট করতে চান?` +
+      (affected.length ? `\nএই ক্যাটাগরির ${affected.length}টা পণ্য ক্যাটাগরিবিহীন হয়ে যাবে (পণ্য মুছবে না)।` : '');
+    if(!confirm(msg)) return;
+    if(r.saved){
+      const result = await postJSON('/api/categories', { action:'delete', name: r.name });
+      if(!result.success){ showCatStatus('ডিলিট হয়নি, আবার চেষ্টা করুন।', false); return; }
+    }
+    for(const p of affected){
+      await apiCall({ action:'save', product:{ ...p, category:'' } });
+    }
+    await loadProducts();
+    await loadCategories();
+    showCatStatus('✓ ক্যাটাগরি ডিলিট হয়েছে।', true);
+  }
 
   document.getElementById('clearFormBtn').addEventListener('click', ()=>{
     document.getElementById('productForm').reset();
