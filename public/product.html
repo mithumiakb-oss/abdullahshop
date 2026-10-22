@@ -71,7 +71,7 @@
     border-radius:999px; display:inline-block; margin-bottom:16px;
   }
   .pd-info h1{color:var(--forest); font-size:1.9rem; font-weight:700; margin-bottom:14px;}
-  .pd-info .pd-desc{color:var(--ink-soft); font-size:1.05rem; line-height:1.8; margin-bottom:22px;}
+  .pd-info .pd-desc{color:var(--ink-soft); font-size:1.05rem; line-height:1.8; margin-bottom:22px; white-space:pre-line;}
   .pd-price{font-family:'Baloo Da 2'; font-size:2.1rem; color:var(--forest); font-weight:700; margin-bottom:26px;}
   .pd-price-row{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:26px;}
   .pd-price-row .pd-price{font-size:2.1rem; margin-bottom:0;}
@@ -222,7 +222,7 @@
           ${thumbsHTML}
         </div>
         <div class="pd-info">
-          <span class="pd-tag">${product.tag}</span>
+          ${product.tag ? `<span class="pd-tag">${product.tag}</span>` : ''}
           <h1>${product.name}</h1>
           <p class="pd-desc">${product.desc}</p>
           ${priceHTML}
@@ -286,9 +286,10 @@
   loadProduct();
   updateCartBadge();
 </script>
-<!-- Cloudflare Web Analytics -->
-    <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js'
+
+  <!-- Cloudflare Web Analytics -->
+  <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js'
     data-cf-beacon='{"token": "1e4a35840dc144f3a8ad940528e3f040"}'></script>
-    <!-- End Cloudflare Web Analytics -->
+  <!-- End Cloudflare Web Analytics -->
 </body>
 </html>
