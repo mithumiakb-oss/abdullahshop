@@ -276,11 +276,11 @@
 
   .p-card:hover{transform:translateY(-6px); box-shadow:0 16px 32px rgba(15,81,50,.15);}
   .p-visual{
-    background:linear-gradient(135deg, var(--paper-2), var(--paper));
+    background:#fff;
     aspect-ratio:1/1; height:auto; display:flex; align-items:center; justify-content:center; position:relative;
   }
   .p-visual svg{width:65%; height:65%;}
-  .p-img{width:100%; height:100%; object-fit:contain; padding:14px;}
+  .p-img{width:100%; height:100%; object-fit:contain; padding:0;}
   .p-tag{
     position:absolute; top:14px; left:14px; background:var(--gold); color:var(--forest);
     font-weight:700; font-size:.78rem; padding:5px 12px; border-radius:999px;
@@ -471,7 +471,6 @@
     .product-grid{grid-template-columns:repeat(2, 1fr); gap:10px;}
     .p-card{border-radius:14px;}
     .p-card:hover{transform:none;}
-    .p-img{padding:8px;}
     .p-tag, .discount-badge{top:8px; font-size:.64rem; padding:3px 8px;}
     .p-tag{left:8px;}
     .discount-badge{right:8px;}
