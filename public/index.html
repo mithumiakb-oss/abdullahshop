@@ -301,6 +301,22 @@
     transition:.2s;
   }
   .buy-btn:hover{background:var(--forest);}
+  .card-bottom{margin-top:auto; display:flex; flex-direction:column; gap:10px;}
+  .card-actions{display:flex; gap:8px;}
+  .card-actions .buy-btn{flex:1; padding:10px 8px; font-size:.88rem; white-space:nowrap;}
+  .buy-btn.add-cart-btn{background:#fff; color:var(--emerald); border:1.5px solid var(--emerald);}
+  .buy-btn.add-cart-btn:hover{background:var(--emerald); color:#fff;}
+  .buy-btn.buy-now-btn{background:var(--gold); color:var(--forest); border:1.5px solid var(--gold);}
+  .buy-btn.buy-now-btn:hover{background:var(--gold-dark); border-color:var(--gold-dark); color:#fff;}
+  .buynow-note{
+    display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
+    background:#FFF3EA; color:var(--forest); border:1px solid #FFD9BF; border-radius:10px;
+    padding:8px 12px; font-size:.86rem; font-weight:600;
+  }
+  .buynow-switch{
+    border:none; background:none; color:var(--emerald); font-family:'Hind Siliguri'; font-weight:700;
+    font-size:.84rem; cursor:pointer; text-decoration:underline; padding:0;
+  }
 
   /* ===== CART ===== */
   .cart-icon-btn{
@@ -479,10 +495,11 @@
       font-size:.86rem; line-height:1.35; min-height:2.7em;
       display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
     }
-    .price-row{flex-direction:column; align-items:stretch; gap:8px; margin-top:auto;}
+    .card-bottom{gap:8px;}
+    .card-actions{flex-direction:column; gap:6px;}
     .price{font-size:1.05rem;}
     .price small{font-size:.72rem; margin-right:4px;}
-    .buy-btn{width:100%; padding:8px 6px; font-size:.8rem;}
+    .card-actions .buy-btn{width:100%; flex:none; padding:8px 6px; font-size:.8rem;}
 
     /* অর্ডার ফর্ম, পরিচিতি, ফুটার */
     .about-wrap{padding:24px 20px; border-radius:20px; gap:24px;}
@@ -735,7 +752,7 @@
     .then(()=>{
       msg.style.display = 'block';
       form.reset();
-      cart = [];
+      if(buyNow){ clearBuyNow(); } else { cart = []; }
       renderCart();
       submitBtn.disabled = false;
       submitBtn.textContent = "অর্ডার নিশ্চিত করুন";
@@ -791,6 +808,34 @@
 
   let cart = loadCartFromStorage(); // { name, price, qty }
 
+  // "এখনই কিনুন": শুধু এই পণ্যটা অর্ডার হবে, কার্টের অন্য পণ্য অক্ষত থাকবে
+  const BUYNOW_KEY = 'abdullahshop_buynow';
+  function loadBuyNow(){
+    try{
+      const raw = sessionStorage.getItem(BUYNOW_KEY);
+      const b = raw ? JSON.parse(raw) : null;
+      return (b && b.name && b.price > 0 && b.qty > 0) ? b : null;
+    }catch(err){ return null; }
+  }
+  function saveBuyNow(b){
+    try{
+      if(b) sessionStorage.setItem(BUYNOW_KEY, JSON.stringify(b));
+      else sessionStorage.removeItem(BUYNOW_KEY);
+    }catch(err){}
+  }
+  // পুরনো/ফেলে যাওয়া Buy Now পরে এসে যেন কার্টের অর্ডারে গোলমাল না করে — শুধু #order লিংকে এলেই রাখা হয়
+  let buyNow = (location.hash === '#order') ? loadBuyNow() : null;
+  if(!buyNow) saveBuyNow(null);
+  function checkoutItems(){ return buyNow ? [buyNow] : cart; }
+  function clearBuyNow(){ if(buyNow){ buyNow = null; saveBuyNow(null); } }
+
+  function startBuyNow(name, price){
+    buyNow = { name, price, qty: 1 };
+    saveBuyNow(buyNow);
+    renderCart();
+    document.getElementById('order').scrollIntoView({behavior:'smooth'});
+  }
+
   const cartOverlay = document.getElementById('cartOverlay');
   const cartDrawer = document.getElementById('cartDrawer');
   const cartBadge = document.getElementById('cartBadge');
@@ -822,6 +867,7 @@
   cartOverlay.addEventListener('click', closeCart);
 
   function addToCart(name, price, btn){
+    clearBuyNow();
     const existing = cart.find(i => i.name === name);
     if(existing){
       existing.qty += 1;
@@ -852,9 +898,12 @@
         </div>
         <div class="p-body">
           <h3>${p.name}</h3>
-          <div class="price-row">
+          <div class="card-bottom">
             <div class="price">${hasDiscount ? `<small>${formatTaka(p.originalPrice)}</small>` : ''}${formatTaka(p.price)}</div>
-            <button class="buy-btn add-cart-btn" data-name="${p.name}" data-price="${p.price}">কার্টে যোগ করুন</button>
+            <div class="card-actions">
+              <button class="buy-btn add-cart-btn" data-name="${p.name}" data-price="${p.price}">কার্টে যোগ করুন</button>
+              <button class="buy-btn buy-now-btn" data-name="${p.name}" data-price="${p.price}">এখনই কিনুন</button>
+            </div>
           </div>
         </div>
       </div>`;
@@ -956,6 +1005,7 @@
       allProducts = products;
       renderCategoryTabs();
       renderProductGrid();
+      if(window.restoreHashScroll) restoreHashScroll();
     }catch(err){
       productGrid.innerHTML = '<p style="color:var(--ink-soft);">পণ্য লোড করতে সমস্যা হয়েছে।</p>';
     }
@@ -1031,6 +1081,11 @@
 
   // Event delegation — works for cards added dynamically after fetch
   productGrid.addEventListener('click', (e)=>{
+    const buyBtn = e.target.closest('.buy-now-btn');
+    if(buyBtn){
+      startBuyNow(buyBtn.dataset.name, parseInt(buyBtn.dataset.price, 10));
+      return;
+    }
     const btn = e.target.closest('.add-cart-btn');
     if(btn){
       addToCart(btn.dataset.name, parseInt(btn.dataset.price, 10), btn);
@@ -1084,29 +1139,43 @@
     const total = cart.reduce((s,i)=>s + (i.price*i.qty), 0);
     cartTotalEl.textContent = formatTaka(total);
 
-    // order form summary box
-    if(cart.length === 0){
+    // order form summary box (Buy Now হলে শুধু সেই পণ্য, নাহলে পুরো কার্ট)
+    const items = checkoutItems();
+    const itemsTotal = items.reduce((s,i)=>s + (i.price*i.qty), 0);
+    if(items.length === 0){
       selectedProductsBox.innerHTML = '<span class="empty-note">এখনো কোনো পণ্য কার্টে যোগ করা হয়নি — উপরে "পণ্য" সেকশন থেকে কার্টে যোগ করুন।</span>';
       productHiddenInput.value = '';
     } else {
       const areaKey = deliveryAreaSelect.value;
       const deliveryCharge = areaKey ? DELIVERY_CHARGES[areaKey] : 0;
-      const grandTotal = total + deliveryCharge;
+      const grandTotal = itemsTotal + deliveryCharge;
 
-      let lines = cart.map(i => `<div class="selected-line"><span>${i.name} × ${i.qty}</span><span>${formatTaka(i.price*i.qty)}</span></div>`).join('');
-      lines += `<div class="selected-line"><span>পণ্যের মোট</span><span>${formatTaka(total)}</span></div>`;
+      let lines = '';
+      if(buyNow){
+        lines += `<div class="buynow-note"><span>⚡ এখনই কিনুন — শুধু এই পণ্যটি অর্ডার হচ্ছে</span>${cart.length ? '<button type="button" class="buynow-switch">কার্টের সব পণ্য অর্ডার করুন</button>' : ''}</div>`;
+      }
+      lines += items.map(i => `<div class="selected-line"><span>${i.name} × ${i.qty}</span><span>${formatTaka(i.price*i.qty)}</span></div>`).join('');
+      lines += `<div class="selected-line"><span>পণ্যের মোট</span><span>${formatTaka(itemsTotal)}</span></div>`;
       lines += areaKey
         ? `<div class="selected-line"><span>ডেলিভারি চার্জ (${DELIVERY_LABELS[areaKey]})</span><span>${formatTaka(deliveryCharge)}</span></div>`
         : `<div class="selected-line"><span>ডেলিভারি চার্জ</span><span style="color:var(--ink-soft);">এলাকা বেছে নিন</span></div>`;
       lines += `<div class="selected-total"><span>সর্বমোট</span><span>${formatTaka(grandTotal)}</span></div>`;
       selectedProductsBox.innerHTML = lines;
 
-      productHiddenInput.value = cart.map(i => `${i.name} x${i.qty} (${formatTaka(i.price*i.qty)})`).join(', ')
-        + ` | পণ্যের মোট: ${formatTaka(total)}`
+      productHiddenInput.value = items.map(i => `${i.name} x${i.qty} (${formatTaka(i.price*i.qty)})`).join(', ')
+        + ` | পণ্যের মোট: ${formatTaka(itemsTotal)}`
         + (areaKey ? ` | ডেলিভারি (${DELIVERY_LABELS[areaKey]}): ${formatTaka(deliveryCharge)}` : '')
         + ` | সর্বমোট: ${formatTaka(grandTotal)}`;
     }
   }
+
+  // "কার্টের সব পণ্য অর্ডার করুন" — Buy Now মোড থেকে কার্টে ফেরা
+  selectedProductsBox.addEventListener('click', (e)=>{
+    if(e.target.closest('.buynow-switch')){
+      clearBuyNow();
+      renderCart();
+    }
+  });
 
   // Re-calculate totals whenever the delivery area changes
   deliveryAreaSelect.addEventListener('change', renderCart);
@@ -1116,9 +1185,23 @@
   window.cartRemoveItem = removeItem;
 
   document.getElementById('cartCheckoutBtn').addEventListener('click', ()=>{
+    if(buyNow){ clearBuyNow(); renderCart(); }
     closeCart();
     document.getElementById('order').scrollIntoView({behavior:'smooth'});
   });
+
+  // পণ্য/ব্যানার লোড হলে পেজের উচ্চতা বদলায়, তাই #order বা #products লিংকে এলে আবার সঠিক জায়গায় নেওয়া হয়
+  let userScrolled = false;
+  ['wheel','touchstart','keydown','mousedown'].forEach(ev => window.addEventListener(ev, ()=>{ userScrolled = true; }, {once:true, passive:true}));
+  function restoreHashScroll(){
+    if(userScrolled || !location.hash || location.hash.length < 2) return;
+    try{
+      const el = document.querySelector(location.hash);
+      if(el && !el.hidden) el.scrollIntoView();
+    }catch(err){}
+  }
+  window.addEventListener('load', restoreHashScroll);
+  window.restoreHashScroll = restoreHashScroll;
 
   renderCart();
 </script>
