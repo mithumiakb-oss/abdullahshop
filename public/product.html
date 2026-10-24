@@ -96,6 +96,33 @@
     box-shadow:0 4px 0 #071026; transition:transform .15s;
   }
   .btn-add-cart:hover{transform:translateY(-2px);}
+  .btn-buy-now{
+    background:var(--gold); color:var(--forest); font-weight:700; padding:15px 30px;
+    border:none; border-radius:999px; font-family:'Hind Siliguri'; font-size:1rem; cursor:pointer;
+    box-shadow:0 4px 0 var(--gold-dark); transition:transform .15s;
+  }
+  .btn-buy-now:hover{transform:translateY(-2px);}
+  .view-cart-link{display:inline-block; margin-top:16px; color:var(--emerald); font-weight:700;}
+  .view-cart-link:hover{text-decoration:underline;}
+
+  /* একই ক্যাটাগরির বাকি পণ্য */
+  .related{margin-top:56px; padding-top:32px; border-top:1px solid #e9ecf3;}
+  .related h2{font-size:1.4rem; color:var(--forest); margin-bottom:18px;}
+  .rel-grid{display:grid; grid-template-columns:repeat(4, 1fr); gap:18px;}
+  .rel-card{display:block; background:#fff; border:1px solid #e9ecf3; border-radius:14px; overflow:hidden; transition:.2s;}
+  .rel-card:hover{box-shadow:0 8px 20px rgba(15,27,61,.10); transform:translateY(-3px);}
+  .rel-img{aspect-ratio:1/1; background:#fff; position:relative;}
+  .rel-img img{width:100%; height:100%; object-fit:contain; display:block;}
+  .rel-badge{position:absolute; top:8px; right:8px; background:#E0333F; color:#fff; font-weight:800; font-size:.68rem; padding:3px 8px; border-radius:999px;}
+  .rel-body{padding:10px 12px 14px;}
+  .rel-name{
+    font-size:.92rem; font-weight:600; color:var(--forest); line-height:1.35; min-height:2.7em;
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+  }
+  .rel-price{margin-top:6px; font-family:'Baloo Da 2'; font-weight:700; color:var(--forest); font-size:1.05rem;}
+  .rel-price s{font-family:'Hind Siliguri'; font-weight:400; color:var(--ink-soft); font-size:.78rem; margin-left:6px;}
+  @media (max-width:800px){ .rel-grid{grid-template-columns:repeat(2, 1fr); gap:10px;} .related{margin-top:36px;} }
+
   .btn-view-cart{
     border:2px solid var(--forest); color:var(--forest); font-weight:700; padding:13px 26px;
     border-radius:999px; font-size:1rem; background:none; cursor:pointer;
@@ -118,7 +145,7 @@
     .pd-info .pd-desc{font-size:.98rem; margin-bottom:16px;}
     .pd-price, .pd-price-row .pd-price{font-size:1.7rem;}
     .pd-btns{gap:10px;}
-    .btn-add-cart, .btn-view-cart{flex:1 1 100%; text-align:center;}
+    .btn-add-cart, .btn-buy-now{flex:1 1 calc(50% - 5px); padding:14px 8px; text-align:center;}
   }
 </style>
 </head>
@@ -164,6 +191,8 @@
 
 <script>
   const CART_KEY = 'abdullahshop_cart';
+  const BUYNOW_KEY = 'abdullahshop_buynow';
+  try{ sessionStorage.removeItem(BUYNOW_KEY); }catch(err){}   // পণ্য দেখার সময় পুরনো Buy Now মুছে যায়
   function loadCart(){
     try{ const raw = localStorage.getItem(CART_KEY); return raw ? JSON.parse(raw) : []; }
     catch(err){ return []; }
@@ -183,13 +212,59 @@
   const id = params.get('id');
   const content = document.getElementById('pdContent');
 
+  function esc(s){
+    return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
   async function loadProduct(){
-    let product = null;
+    let product = null, list = null;
     try{
-      const res = await fetch('/api/products?id=' + encodeURIComponent(id));
-      if(res.ok){ product = await res.json(); }
-    }catch(err){ /* leave product as null */ }
+      const res = await fetch('/api/products');
+      if(res.ok){
+        list = await res.json();
+        if(Array.isArray(list)) product = list.find(p => p.id === id) || null;
+      }
+    }catch(err){ /* নিচে একক পণ্যের অনুরোধ দিয়ে চেষ্টা হবে */ }
+    if(!product){
+      try{
+        const res = await fetch('/api/products?id=' + encodeURIComponent(id));
+        if(res.ok){ product = await res.json(); }
+      }catch(err){ /* leave product as null */ }
+    }
     renderProduct(product);
+    renderRelated(list, product);
+  }
+
+  // নিচে একই ক্যাটাগরির বাকি পণ্য (ক্যাটাগরি না থাকলে বা একা থাকলে অন্য পণ্য)
+  function renderRelated(list, product){
+    if(!product || !Array.isArray(list)) return;
+    const others = list.filter(p => p.id !== product.id);
+    const cat = (product.category || '').trim();
+    const sameCat = cat ? others.filter(p => (p.category || '').trim() === cat) : [];
+    let items, title;
+    if(sameCat.length){ items = sameCat; title = esc(cat) + ' ক্যাটাগরির আরও পণ্য'; }
+    else if(others.length){ items = others; title = 'আরও পণ্য দেখুন'; }
+    else return;
+
+    const cards = items.slice(0, 8).map(p => {
+      const img = (p.images && p.images.length) ? p.images[0] : p.img;
+      const hasDiscount = p.originalPrice && p.originalPrice > p.price;
+      const pct = hasDiscount ? Math.round((1 - p.price / p.originalPrice) * 100) : 0;
+      return `
+        <a class="rel-card" href="product.html?id=${encodeURIComponent(p.id)}">
+          <div class="rel-img">
+            ${hasDiscount ? `<span class="rel-badge">-${pct}%</span>` : ''}
+            <img src="${esc(img)}" alt="${esc(p.name)}" loading="lazy">
+          </div>
+          <div class="rel-body">
+            <div class="rel-name">${esc(p.name)}</div>
+            <div class="rel-price">${formatTaka(p.price)}${hasDiscount ? `<s>${formatTaka(p.originalPrice)}</s>` : ''}</div>
+          </div>
+        </a>`;
+    }).join('');
+
+    // insertAdjacentHTML: উপরের বাটনগুলোর ইভেন্ট নষ্ট করে না
+    content.insertAdjacentHTML('beforeend', `<section class="related"><h2>${title}</h2><div class="rel-grid">${cards}</div></section>`);
   }
 
   function renderProduct(product){
@@ -236,10 +311,11 @@
             </div>
           </div>
           <div class="pd-btns">
+            <button class="btn-buy-now" id="buyNowBtn">এখনই কিনুন</button>
             <button class="btn-add-cart" id="addCartBtn">কার্টে যোগ করুন</button>
-            <a href="index.html#order" class="btn-view-cart">কার্ট দেখে অর্ডার করুন</a>
           </div>
           <p class="added-msg" id="addedMsg">✓ কার্টে যোগ হয়েছে!</p>
+          <a href="index.html#order" class="view-cart-link">কার্ট দেখে অর্ডার করুন →</a>
         </div>
       </div>`;
 
@@ -269,6 +345,22 @@
     });
     document.getElementById('qtyMinus').addEventListener('click', ()=>{
       if(qty > 1){ qty -= 1; qtyVal.textContent = qty; }
+    });
+
+    document.getElementById('buyNowBtn').addEventListener('click', ()=>{
+      const item = { name: product.name, price: product.price, qty: qty };
+      let saved = false;
+      try{
+        sessionStorage.setItem(BUYNOW_KEY, JSON.stringify(item));
+        saved = !!sessionStorage.getItem(BUYNOW_KEY);
+      }catch(err){}
+      if(!saved){   // ব্রাউজার সেশন সেভ না করলে কার্টে যোগ করে অর্ডারে নেওয়া হবে
+        const cart = loadCart();
+        const existing = cart.find(i => i.name === product.name);
+        if(existing){ existing.qty += qty; } else { cart.push(item); }
+        saveCart(cart);
+      }
+      window.location.href = 'index.html#order';
     });
 
     document.getElementById('addCartBtn').addEventListener('click', ()=>{
