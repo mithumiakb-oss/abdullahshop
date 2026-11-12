@@ -29,6 +29,15 @@ export default {
       }
     }
 
+    if (url.pathname === '/api/settings') {
+      if (request.method === 'GET') {
+        return handleSettingsGet(request, env);
+      }
+      if (request.method === 'POST') {
+        return handleSettingsPost(request, env);
+      }
+    }
+
     // ---- SEO: sitemap, robots, এবং পেজভেদে টাইটেল/বিবরণ/শেয়ার ছবি ----
     if (request.method === 'GET') {
       if (url.pathname === '/sitemap.xml') {
@@ -342,4 +351,61 @@ async function handleHomePage(request, env) {
   return new HTMLRewriter()
     .on('head', { element(e) { e.append(extra, { html: true }); } })
     .transform(res);
+}
+
+// ================= সাইট সেটিংস (হোয়াটসঅ্যাপ নম্বর, ফেসবুক পেজের লিংক) =================
+// শুধু ফেসবুকের নিজস্ব ঠিকানা গ্রহণ করা হয়; অন্য কিছু (যেমন javascript:) বাদ যায়
+function safeFacebookUrl(input) {
+  try {
+    let s = String(input || '').trim();
+    if (!s) return '';
+    if (!/^https?:\/\//i.test(s)) s = 'https://' + s;
+    const u = new URL(s);
+    if (u.protocol !== 'https:' && u.protocol !== 'http:') return '';
+    u.protocol = 'https:';
+    const host = u.hostname.toLowerCase();
+    const ok = ['facebook.com', 'fb.com', 'fb.me', 'm.me', 'messenger.com']
+      .some(d => host === d || host.endsWith('.' + d));
+    return ok ? u.href : '';
+  } catch (err) {
+    return '';
+  }
+}
+
+async function handleSettingsGet(request, env) {
+  let settings = { whatsapp: '', facebook: '' };
+  try {
+    const raw = await env.PRODUCTS_KV.get('settings');
+    if (raw) settings = { ...settings, ...JSON.parse(raw) };
+  } catch (err) { /* ডিফল্ট */ }
+  return new Response(JSON.stringify({ whatsapp: settings.whatsapp || '', facebook: settings.facebook || '' }), {
+    headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' }
+  });
+}
+
+async function handleSettingsPost(request, env) {
+  const authKey = request.headers.get('X-Admin-Key');
+  if (!env.ADMIN_SECRET || authKey !== env.ADMIN_SECRET) {
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+      status: 401,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+
+  const body = await request.json();
+  if (!body.settings) {
+    return new Response(JSON.stringify({ error: 'Invalid request' }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+
+  const whatsapp = String(body.settings.whatsapp || '').replace(/\D/g, '').slice(0, 15);
+  const facebook = safeFacebookUrl(body.settings.facebook).slice(0, 300);
+  const settings = { whatsapp, facebook };
+
+  await env.PRODUCTS_KV.put('settings', JSON.stringify(settings));
+  return new Response(JSON.stringify({ success: true, settings }), {
+    headers: { 'Content-Type': 'application/json' }
+  });
 }
