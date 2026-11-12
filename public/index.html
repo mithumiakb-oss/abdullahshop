@@ -6,15 +6,15 @@
 <title>AbdullahShop.com — আপনার পছন্দের অনলাইন দোকান</title>
 <!-- Google Search Console যাচাই — এটা মুছবেন না -->
 <meta name="google-site-verification" content="LZumhasIrlfngMMD9LHAUHqreNOYOU23g81DVh2_Iik" />
-<meta name="description" content="AbdullahShop.com — উইন্টার কালেকশন, ঘড়ি, কিচেনওয়্যার, মোবাইল গ্যাজেট সহ প্রয়োজনীয় সবকিছু এক জায়গায়, ক্যাশ অন ডেলিভারিতে সারাদেশে।">
+<meta name="description" content="AbdullahShop.com — অটোমেটিক ওয়াটার ডিসপেনসার, হ্যান্ডহেল্ড কুলিং ফ্যান ও ওয়্যারলেস হেডফোন সহ প্রয়োজনীয় সবকিছু এক জায়গায়, ক্যাশ অন ডেলিভারিতে সারাদেশে।">
 
 <!-- Social share preview -->
 <meta property="og:title" content="AbdullahShop.com — আপনার পছন্দের অনলাইন দোকান">
-<meta property="og:description" content="উইন্টার কালেকশন, ঘড়ি, কিচেনওয়্যার, মোবাইল গ্যাজেট সহ প্রয়োজনীয় সবকিছু এক জায়গায়।">
+<meta property="og:description" content="অটোমেটিক ওয়াটার ডিসপেনসার, হ্যান্ডহেল্ড কুলিং ফ্যান ও ওয়্যারলেস হেডফোন সহ প্রয়োজনীয় সবকিছু এক জায়গায়।">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="AbdullahShop.com">
-<meta name="twitter:description" content="উইন্টার কালেকশন, ঘড়ি, কিচেনওয়্যার, মোবাইল গ্যাজেট — এক জায়গায়।">
+<meta name="twitter:description" content="অটোমেটিক ওয়াটার ডিসপেনসার, কুলিং ফ্যান ও হেডফোন — এক জায়গায়।">
 
 <!-- Favicon (shopping bag emoji as a quick favicon) -->
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛍️</text></svg>">
@@ -158,6 +158,34 @@
   .stat-row span{color:var(--ink-soft); font-size:.9rem;}
 
   [hidden]{display:none !important;}
+  .float-stack{
+    position:fixed; right:14px; bottom:16px; display:flex; flex-direction:column; gap:10px;
+    z-index:80; transition:opacity .25s;
+  }
+  .float-stack.is-away{opacity:0; pointer-events:none;}   /* অর্ডার ফর্মের সময় সরে যায়, বাটন আটকায় না */
+  .float-btn{
+    width:52px; height:52px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    box-shadow:0 6px 18px rgba(0,0,0,.25); transition:transform .2s;
+  }
+  .float-btn:hover{transform:scale(1.07);}
+  .float-btn svg{width:28px; height:28px; fill:#fff;}
+  .float-wa{background:#25D366;}
+  .float-fb{background:#1877F2;}
+  .wa-order-btn{
+    display:flex; align-items:center; justify-content:center; gap:8px; margin-top:12px;
+    border:2px solid #25D366; color:#128C4A; font-weight:700; border-radius:999px; padding:12px;
+    font-size:1rem; text-decoration:none; background:#fff; transition:.2s;
+  }
+  .wa-order-btn:hover{background:#25D366; color:#fff;}
+  .wa-order-btn svg{width:22px; height:22px; fill:currentColor;}
+  .social-links{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;}
+  .social-links a{
+    display:inline-flex; align-items:center; gap:7px; padding:8px 14px; border-radius:999px;
+    font-size:.88rem; font-weight:600; color:#fff;
+  }
+  .social-links svg{width:18px; height:18px; fill:#fff;}
+  .social-links .s-wa{background:#25D366;}
+  .social-links .s-fb{background:#1877F2;}
 
   .cat-tiles{display:flex; flex-wrap:wrap; gap:18px;}
   .cat-tile{
@@ -567,6 +595,11 @@
   </div>
 </header>
 
+<div class="float-stack" id="floatStack" hidden>
+  <a class="float-btn float-wa" id="waFloat" hidden target="_blank" rel="noopener" aria-label="হোয়াটসঅ্যাপে মেসেজ করুন"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></a>
+  <a class="float-btn float-fb" id="fbFloat" hidden target="_blank" rel="noopener" aria-label="আমাদের ফেসবুক পেজ"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M13.5 22v-8.2h2.8l.5-3.3h-3.3V8.4c0-.9.3-1.6 1.7-1.6h1.7V3.9c-.3 0-1.3-.1-2.4-.1-2.5 0-4.1 1.5-4.1 4.2v2.5H7.7v3.3h2.7V22h3.1z"/></svg></a>
+</div>
+
 <div class="cart-overlay" id="cartOverlay"></div>
 <div class="cart-drawer" id="cartDrawer">
   <div class="cart-drawer-head">
@@ -689,6 +722,7 @@
           <textarea id="custAddress" name="address" placeholder="সম্পূর্ণ ঠিকানা লিখুন" autocomplete="street-address" required></textarea>
         </div>
         <button type="submit" class="submit-btn" id="submitBtn">অর্ডার নিশ্চিত করুন</button>
+        <a class="wa-order-btn" id="waOrderBtn" hidden target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg> হোয়াটসঅ্যাপে অর্ডার করুন</a>
         <div class="form-msg" id="formMsg" role="status" aria-live="polite">ধন্যবাদ! আপনার অর্ডার সফলভাবে জমা হয়েছে। শীঘ্রই যোগাযোগ করা হবে।</div>
         <noscript>
           <p style="margin-top:12px; color:#C0392B;">অর্ডার ফর্মটি কাজ করার জন্য ব্রাউজারে JavaScript চালু রাখতে হবে। অথবা সরাসরি ফোনে কল করুন।</p>
@@ -719,6 +753,10 @@
         <li>✉️ infoabdullahshop@gmail.com</li>
         <li>📍 ময়মনসিংহ, বাংলাদেশ</li>
       </ul>
+      <div class="social-links" id="socialLinks" hidden>
+        <a class="s-wa" id="waFooter" hidden target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg> হোয়াটসঅ্যাপ</a>
+        <a class="s-fb" id="fbFooter" hidden target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M13.5 22v-8.2h2.8l.5-3.3h-3.3V8.4c0-.9.3-1.6 1.7-1.6h1.7V3.9c-.3 0-1.3-.1-2.4-.1-2.5 0-4.1 1.5-4.1 4.2v2.5H7.7v3.3h2.7V22h3.1z"/></svg> ফেসবুক পেজ</a>
+      </div>
     </div>
   </div>
   <div class="footer-bottom">© 2026 AbdullahShop.com — সর্বস্বত্ব সংরক্ষিত।</div>
@@ -882,6 +920,98 @@
       setTimeout(()=>{ btn.textContent = oldText; }, 1200);
     }
     openCart();
+  }
+
+  // ================= যোগাযোগ বাটন: হোয়াটসঅ্যাপ ও ফেসবুক =================
+  let SITE = { whatsapp: '', facebook: '' };
+
+  // 01XXXXXXXXX → 8801XXXXXXXXX (wa.me এর জন্য দেশের কোডসহ দরকার)
+  function waNumber(raw){
+    const d = String(raw || '').replace(/\D/g, '');
+    if(!d) return '';
+    if(d.startsWith('880')) return d;
+    if(d.startsWith('0')) return '880' + d.slice(1);
+    if(d.length === 10 && d.startsWith('1')) return '880' + d;
+    return d;
+  }
+  // শুধু ফেসবুকের ঠিকানাই লিংক হবে
+  function safeFacebook(u){
+    try{
+      let s = String(u || '').trim();
+      if(!s) return '';
+      if(!/^https?:\/\//i.test(s)) s = 'https://' + s;
+      const url = new URL(s);
+      const h = url.hostname.toLowerCase();
+      const ok = ['facebook.com','fb.com','fb.me','m.me','messenger.com'].some(d => h === d || h.endsWith('.' + d));
+      if(!ok) return '';
+      url.protocol = 'https:';
+      return url.href;
+    }catch(err){ return ''; }
+  }
+  function waLink(text){
+    const n = waNumber(SITE.whatsapp);
+    return n ? 'https://wa.me/' + n + '?text=' + encodeURIComponent(text) : '';
+  }
+
+  function orderWhatsAppText(){
+    const items = checkoutItems();
+    if(!items.length) return 'আসসালামু আলাইকুম, আমি AbdullahShop থেকে কিছু কিনতে চাই।';
+    const areaKey = deliveryAreaSelect.value;
+    const delivery = areaKey ? DELIVERY_CHARGES[areaKey] : 0;
+    const itemsTotal = items.reduce((s,i)=>s + i.price*i.qty, 0);
+    let t = 'আসসালামু আলাইকুম, আমি AbdullahShop থেকে অর্ডার করতে চাই:\n';
+    t += items.map(i => '• ' + i.name + ' × ' + i.qty + ' = ' + formatTaka(i.price*i.qty)).join('\n');
+    if(areaKey) t += '\nডেলিভারি (' + DELIVERY_LABELS[areaKey] + '): ' + formatTaka(delivery);
+    t += '\nসর্বমোট: ' + formatTaka(itemsTotal + delivery);
+    const nm = (document.getElementById('custName').value || '').trim();
+    const ph = (document.getElementById('custPhone').value || '').trim();
+    const ad = (document.getElementById('custAddress').value || '').trim();
+    if(nm) t += '\nনাম: ' + nm;
+    if(ph) t += '\nমোবাইল: ' + ph;
+    if(ad) t += '\nঠিকানা: ' + ad;
+    return t;
+  }
+
+  function updateContactLinks(){
+    const hasWa = !!waNumber(SITE.whatsapp);
+    const fb = safeFacebook(SITE.facebook);
+    const generic = 'আসসালামু আলাইকুম, আমি AbdullahShop থেকে কিছু জানতে চাই।';
+
+    const waF = document.getElementById('waFloat'), fbF = document.getElementById('fbFloat');
+    waF.hidden = !hasWa; if(hasWa) waF.href = waLink(generic);
+    fbF.hidden = !fb;    if(fb)    fbF.href = fb;
+    document.getElementById('floatStack').hidden = !(hasWa || fb);
+
+    const waFt = document.getElementById('waFooter'), fbFt = document.getElementById('fbFooter');
+    waFt.hidden = !hasWa; if(hasWa) waFt.href = waLink(generic);
+    fbFt.hidden = !fb;    if(fb)    fbFt.href = fb;
+    document.getElementById('socialLinks').hidden = !(hasWa || fb);
+
+    const orderBtn = document.getElementById('waOrderBtn');
+    const hasItems = checkoutItems().length > 0;
+    orderBtn.hidden = !(hasWa && hasItems);
+    if(hasWa && hasItems) orderBtn.href = waLink(orderWhatsAppText());
+  }
+  ['custName','custPhone','custAddress','deliveryArea'].forEach(id => {
+    const el = document.getElementById(id);
+    el.addEventListener('input', updateContactLinks);
+    el.addEventListener('change', updateContactLinks);
+  });
+
+  // অর্ডার ফর্ম দেখা গেলে ভাসমান বাটন সরে যায় (ফর্মের বাটনে বাধা না দিতে)
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(entries => {
+      document.getElementById('floatStack').classList.toggle('is-away', entries[0].isIntersecting);
+    }, { threshold: 0.05 }).observe(document.getElementById('order'));
+  }
+
+  async function loadSiteSettings(){
+    try{
+      const res = await fetch('/api/settings');
+      const s = await res.json();
+      SITE = { whatsapp: s.whatsapp || '', facebook: s.facebook || '' };
+    }catch(err){ /* সেটিংস না পেলে বাটন আসবে না */ }
+    updateContactLinks();
   }
 
   // ================= PRODUCTS (loaded from /api/products) =================
@@ -1168,6 +1298,7 @@
         + (areaKey ? ` | ডেলিভারি (${DELIVERY_LABELS[areaKey]}): ${formatTaka(deliveryCharge)}` : '')
         + ` | সর্বমোট: ${formatTaka(grandTotal)}`;
     }
+    updateContactLinks();
   }
 
   // "কার্টের সব পণ্য অর্ডার করুন" — Buy Now মোড থেকে কার্টে ফেরা
@@ -1205,6 +1336,7 @@
   window.restoreHashScroll = restoreHashScroll;
 
   renderCart();
+  loadSiteSettings();
 </script>
 
   <!-- Cloudflare Web Analytics -->
