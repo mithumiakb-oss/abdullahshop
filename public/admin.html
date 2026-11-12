@@ -78,6 +78,27 @@
   </div>
 
   <div class="card-box">
+    <h2 style="font-size:1.1rem; margin-bottom:6px;">যোগাযোগ বাটন (হোয়াটসঅ্যাপ ও ফেসবুক)</h2>
+    <p style="color:var(--ink-soft); font-size:.88rem; margin-bottom:16px;">নম্বর বা লিংক দিলে সাইটে সবুজ হোয়াটসঅ্যাপ ও নীল ফেসবুক বাটন আসবে (পেজের কোণায় ভেসে থাকবে এবং ফুটারে)। ক্রেতা হোয়াটসঅ্যাপে অর্ডারও করতে পারবে। কোনোটা খালি রাখলে সেই বাটন আসবে না।</p>
+    <form id="settingsForm">
+      <div class="form-grid">
+        <div>
+          <label>হোয়াটসঅ্যাপ নম্বর (যেমন: 01766100709)</label>
+          <input type="text" id="setWhatsapp" inputmode="numeric" placeholder="01XXXXXXXXX">
+        </div>
+        <div>
+          <label>ফেসবুক পেজের লিংক</label>
+          <input type="text" id="setFacebook" placeholder="https://www.facebook.com/আপনার-পেজ">
+        </div>
+      </div>
+      <div style="margin-top:16px;">
+        <button type="submit" class="btn">সংরক্ষণ করুন</button>
+      </div>
+      <p class="status-msg" id="settingsStatus"></p>
+    </form>
+  </div>
+
+  <div class="card-box">
     <h2 style="font-size:1.1rem; margin-bottom:16px;">হোমপেজ অফার ব্যানার</h2>
     <form id="bannerForm">
       <div style="margin-bottom:16px;">
@@ -216,6 +237,7 @@
     loadProducts();
     loadCategories();
     loadBanner();
+    loadSettings();
   }
 
   document.getElementById('loginBtn').addEventListener('click', async ()=>{
@@ -505,6 +527,42 @@
     }
     statusEl.style.display = 'block';
     setTimeout(()=>{ statusEl.style.display = 'none'; }, 3000);
+  });
+
+  // ================= যোগাযোগ বাটন (হোয়াটসঅ্যাপ, ফেসবুক) =================
+  async function loadSettings(){
+    try{
+      const res = await fetch('/api/settings');
+      const s = await res.json();
+      document.getElementById('setWhatsapp').value = s.whatsapp || '';
+      document.getElementById('setFacebook').value = s.facebook || '';
+    }catch(err){ /* খালি থাকবে */ }
+  }
+
+  document.getElementById('settingsForm').addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const typedFb = document.getElementById('setFacebook').value.trim();
+    const result = await postJSON('/api/settings', { settings: {
+      whatsapp: document.getElementById('setWhatsapp').value,
+      facebook: typedFb
+    }});
+    const el = document.getElementById('settingsStatus');
+    if(result.success){
+      document.getElementById('setWhatsapp').value = result.settings.whatsapp;
+      document.getElementById('setFacebook').value = result.settings.facebook;
+      if(typedFb && !result.settings.facebook){
+        el.textContent = 'ফেসবুকের লিংকটা ঠিক মনে হচ্ছে না (facebook.com দিয়ে শুরু হওয়া লিংক দিন)। বাকিটা সংরক্ষণ হয়েছে।';
+        el.className = 'status-msg error';
+      } else {
+        el.textContent = '✓ সংরক্ষণ হয়েছে!';
+        el.className = 'status-msg ok';
+      }
+    } else {
+      el.textContent = 'সংরক্ষণ হয়নি — সার্ভার আপডেট হয়েছে কিনা দেখুন (src/index.js)।';
+      el.className = 'status-msg error';
+    }
+    el.style.display = 'block';
+    setTimeout(()=>{ el.style.display = 'none'; }, 4500);
   });
 </script>
 
